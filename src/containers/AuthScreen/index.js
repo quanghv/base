@@ -1,26 +1,25 @@
 import React, { Component } from "react";
-import { Container } from "native-base";
+import { Container, Content, Form } from "native-base";
 import {
   KeyboardAvoidingView,
   LayoutAnimation,
   Platform,
-  StyleSheet,
   UIManager
 } from "react-native";
 import { Image, View } from "react-native-animatable";
+import { Field, reduxForm } from "redux-form";
+import { connect } from "react-redux";
 
 import images from "../../config/images";
-import metrics from "../../config/metrics";
+import styles from "../../config/styles";
 
-import LoginForm from "./LoginForm";
-
-const IMAGE_WIDTH = metrics.DEVICE_WIDTH * 0.4;
+import FieldInput from "../../components/FieldInput";
 
 if (Platform.OS === "android") {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-export default class AuthScreen extends Component {
+class AuthScreen extends Component {
   state = {
     visibleForm: null // Can be: null | SIGNUP | LOGIN
   };
@@ -33,56 +32,65 @@ export default class AuthScreen extends Component {
     );
   };
 
-  _hideAuthScreen = async () => {
-    // 2. Fade out the logo
-    await this.logoImgRef.fadeOut(800);
-    // 3. Tell the container (app.js) that the animation has completed
-    // this.props.onLoginAnimationCompleted();
-  };
-
   render() {
-    // The following style is responsible of the "bounce-up from bottom" animation of the form
-    const formStyle = { marginTop: 40 };
     return (
       <Container>
-        <Image
-          animation={"bounceIn"}
-          ref={ref => (this.logoImgRef = ref)}
-          style={styles.logoImg}
-          source={images.logo}
-        />
-        <KeyboardAvoidingView
-          keyboardVerticalOffset={-100}
-          behavior={"padding"}
-          style={[formStyle, styles.bottom]}
-        >
-          <LoginForm
-            ref={ref => (this.formRef = ref)}
+        <View style={styles.content}>
+          <Image
+            animation={"bounceIn"}
+            ref={ref => (this.logoImgRef = ref)}
+            style={styles.logo}
+            source={images.logo}
           />
-        </KeyboardAvoidingView>
+          <KeyboardAvoidingView
+            keyboardVerticalOffset={-100}
+            behavior={"height"}
+          >
+            <Field
+              withRef
+              name="username"
+              ref={c => (this.usernameInputRef = c)}
+              keyboardType="phone-pad"
+              returnKeyType="next"
+              refF={"usernameInputRef"}
+              component={FieldInput}
+              onSubmitEditing={() => this.passwordInputRef.getRenderedComponent().focus()}
+              label="Tài khoản"
+            />
+            <Field
+              withRef
+              ref={ref => (this.passwordInputRef = ref)}
+              refF={"passwordInputRef"}
+              name="password"
+              component={FieldInput}
+              label="Mật khẩu"
+              returnKeyType="send"
+              keyboardType="numeric"
+              isSecureText={true}
+            />
+          </KeyboardAvoidingView>
+        </View>
       </Container>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: "column",
-    width: metrics.DEVICE_WIDTH,
-    height: metrics.DEVICE_HEIGHT,
-    paddingTop: 24,
-    backgroundColor: "white"
-  },
-  logoImg: {
-    flex: 1,
-    height: null,
-    width: IMAGE_WIDTH,
-    alignSelf: "center",
-    resizeMode: "contain",
-    marginVertical: 30
-  },
-  bottom: {
-    backgroundColor: "#1976D2"
+const mapStateToProps = state => {
+  return { accountInfo: state.accountReducer };
+};
+
+export default reduxForm({
+  form: "loginForm",
+  validate: values => {
+    const error = {};
+    error.username = "";
+    error.password = "";
+    if (!values.username) {
+      error.username = "Chưa nhập";
+    }
+    if (!values.password) {
+      error.password = "Chưa nhập";
+    }
+    return error;
   }
-});
+})(connect(mapStateToProps)(AuthScreen));
