@@ -24,12 +24,10 @@ class AuthScreen extends Component {
     visibleForm: null // Can be: null | SIGNUP | LOGIN
   };
 
-  simulateLogin = (username, password) => {
-    this.setState({ isLoading: true });
-    setTimeout(
-      () => this.setState({ isLoggedIn: true, isLoading: false }),
-      1000
-    );
+  onSubmitPressed = () => {
+    console.log(this.passwordInputRef.getRenderedComponent().refs.passwordInputRef);
+    this.passwordInputRef.getRenderedComponent().refs.passwordInputRef._root.focus();
+    // this.passwordInputRef.getRenderedComponent().focus();
   };
 
   render() {
@@ -54,7 +52,7 @@ class AuthScreen extends Component {
               returnKeyType="next"
               refF={"usernameInputRef"}
               component={FieldInput}
-              onSubmitEditing={() => this.passwordInputRef.getRenderedComponent().focus()}
+              onEnter={this.onSubmitPressed}
               label="Tài khoản"
             />
             <Field
@@ -64,7 +62,7 @@ class AuthScreen extends Component {
               name="password"
               component={FieldInput}
               label="Mật khẩu"
-              returnKeyType="send"
+              returnKeyType="done"
               keyboardType="numeric"
               isSecureText={true}
             />

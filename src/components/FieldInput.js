@@ -3,11 +3,7 @@ import { Item, Input, Icon, Text } from "native-base";
 
 export default class FieldInput extends React.Component {
   state = { isFocused: false };
-  focus = () => {
-    console.log(this.textInputRef, "onFocus");
-    // this.textInputRef.focus();
-    this.textInputRef.props.focus();
-  };
+
   render() {
     const {
       input,
@@ -15,7 +11,7 @@ export default class FieldInput extends React.Component {
       isSecureText,
       keyboardType,
       returnKeyType,
-      onSubmitEditing,
+      onEnter,
       label,
       meta: { touched, error }
     } = this.props;
@@ -24,15 +20,16 @@ export default class FieldInput extends React.Component {
       <Item error={touched && hasError}>
         {icon ? <Icon active name={icon} primary /> : null}
         <Input
+          autoCapitalize="none"
+          placeholderTextColor="#999999"
           {...input}
-          ref={ref => (this.textInputRef = ref)}
+          ref={this.props.refF}
           focus={this.focus}
           placeholder={label}
           secureTextEntry={isSecureText}
           keyboardType={keyboardType}
           returnKeyType={returnKeyType}
-          onFocus={() => this.setState({ isFocused: true })}
-          onSubmitEditing={onSubmitEditing}
+          onSubmitEditing={onEnter}
         />
         {touched && hasError
           ? <Text>
