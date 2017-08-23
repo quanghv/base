@@ -1,0 +1,14 @@
+{
+  "expo": {
+    "name": "DEMO APP",
+    "icon": "./src/images/logo.png",
+    "sdkVersion": "20.0.0",
+    "primaryColor": "#2874F0",
+    "androidStatusBarColor": "#2874F0",
+    "loading": {
+      "icon": "./src/images/logo.png",
+      "hideExponentText": true,
+      "backgroundColor": "#e21b0c"
+    }
+  }
+}
