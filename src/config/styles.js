@@ -9,11 +9,19 @@ const styles = StyleSheet.create({
   },
   logo: {
     flex: 1,
-    height: null,
-    width: metrics.DEVICE_WIDTH * 0.6,
+    height: metrics.DEVICE_WIDTH * 0.3,
+    width: metrics.DEVICE_WIDTH * 0.3,
     alignSelf: "center",
     resizeMode: "contain",
     marginVertical: 30
+  },
+  viewCenter: {
+    flex: 1,
+    justifyContent: "center"
+  },
+  textError: {
+    color: "red",
+    fontSize: 12
   }
 });
 export default styles;

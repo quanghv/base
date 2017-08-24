@@ -1,6 +1,10 @@
 {
   "extends": "rallycoding",
   "rules": {
-    "quotes": ["error", "double"]
+    "quotes": ["error", "double"],
+    "no-underscore-dangle": [
+      "error",
+      { "allowAfterThis": true, "allow": ["_root"] }
+    ]
   }
 }

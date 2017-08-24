@@ -1,58 +1,66 @@
 import React, { Component } from "react";
-import { Container, Content, Form } from "native-base";
-import {
-  KeyboardAvoidingView,
-  LayoutAnimation,
-  Platform,
-  UIManager
-} from "react-native";
+import Expo from "expo";
+import { Container, Content, Button, Text } from "native-base";
 import { Image, View } from "react-native-animatable";
 import { Field, reduxForm } from "redux-form";
 import { connect } from "react-redux";
 
+import fonts from "../../config/fonts";
 import images from "../../config/images";
 import styles from "../../config/styles";
 
 import FieldInput from "../../components/FieldInput";
 
-if (Platform.OS === "android") {
-  UIManager.setLayoutAnimationEnabledExperimental(true);
-}
-
 class AuthScreen extends Component {
-  state = {
-    visibleForm: null // Can be: null | SIGNUP | LOGIN
-  };
+  state = { isReady: false };
+  async componentWillMount() {
+    await Expo.Font.loadAsync({
+      Roboto: fonts.Roboto,
+      Roboto_medium: fonts.Roboto_medium
+    });
+    this.setState({ isReady: true });
+  }
 
-  onSubmitPressed = () => {
-    console.log(this.passwordInputRef.getRenderedComponent().refs.passwordInputRef);
-    this.passwordInputRef.getRenderedComponent().refs.passwordInputRef._root.focus();
-    // this.passwordInputRef.getRenderedComponent().focus();
+  submit = values => {
+    console.log(values);
   };
 
   render() {
+    if (!this.state.isReady) {
+      return <Expo.AppLoading />;
+    }
     return (
       <Container>
-        <View style={styles.content}>
+        <Content
+          contentContainerStyle={{
+            alignItems: "center"
+          }}
+          style={{ backgroundColor: "white" }}
+        >
           <Image
             animation={"bounceIn"}
             ref={ref => (this.logoImgRef = ref)}
             style={styles.logo}
             source={images.logo}
           />
-          <KeyboardAvoidingView
-            keyboardVerticalOffset={-100}
-            behavior={"height"}
+          <View
+            style={{
+              width: "90%"
+            }}
           >
             <Field
               withRef
               name="username"
               ref={c => (this.usernameInputRef = c)}
-              keyboardType="phone-pad"
+              keyboardType="numeric"
               returnKeyType="next"
               refF={"usernameInputRef"}
               component={FieldInput}
-              onEnter={this.onSubmitPressed}
+              onEnter={() =>
+                this.passwordInputRef
+                  .getRenderedComponent()
+                  .refs.passwordInputRef._root.focus()}
+              style={{ width: "80%" }}
               label="Tài khoản"
             />
             <Field
@@ -64,10 +72,19 @@ class AuthScreen extends Component {
               label="Mật khẩu"
               returnKeyType="done"
               keyboardType="numeric"
-              isSecureText={true}
+              onEnter={this.props.handleSubmit(this.submit.bind(this))}
+              secureTextEntry
             />
-          </KeyboardAvoidingView>
-        </View>
+            <View animation={"bounceIn"} style={{ marginTop: 20 }}>
+              <Button
+                block
+                onPress={this.props.handleSubmit(this.submit.bind(this))}
+              >
+                <Text>Đăng nhập</Text>
+              </Button>
+            </View>
+          </View>
+        </Content>
       </Container>
     );
   }
@@ -77,18 +94,20 @@ const mapStateToProps = state => {
   return { accountInfo: state.accountReducer };
 };
 
+const validate = values => {
+  const error = {};
+  error.username = "";
+  error.password = "";
+  if (!values.username) {
+    error.username = "Chưa nhập";
+  }
+  if (!values.password) {
+    error.password = "Chưa nhập";
+  }
+  return error;
+};
+
 export default reduxForm({
   form: "loginForm",
-  validate: values => {
-    const error = {};
-    error.username = "";
-    error.password = "";
-    if (!values.username) {
-      error.username = "Chưa nhập";
-    }
-    if (!values.password) {
-      error.password = "Chưa nhập";
-    }
-    return error;
-  }
+  validate: values => validate(values)
 })(connect(mapStateToProps)(AuthScreen));
