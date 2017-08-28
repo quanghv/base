@@ -6,6 +6,10 @@ import styles from "../config/styles";
 import { consoleLog } from "./AppLog";
 
 export default class AppComponent extends Component {
+  logThis = str => {
+    consoleLog(str);
+  };
+
   renderLoading = header =>
     <Container>
       {header}

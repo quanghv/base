@@ -1,4 +1,6 @@
-import constant from "../config/constant";
+const constant = {
+  DEBUG: true
+};
 
 /**
  * custom console log
