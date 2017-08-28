@@ -1,6 +1,7 @@
 import React from "react";
 import { Item, Input, Icon, Text } from "native-base";
 import styles from "../config/styles";
+import colors from "../config/colors";
 
 export default class FieldInput extends React.Component {
   render() {
@@ -10,6 +11,7 @@ export default class FieldInput extends React.Component {
       secureTextEntry,
       keyboardType,
       returnKeyType,
+      returnKeyLabel,
       onEnter,
       label,
       style,
@@ -24,10 +26,13 @@ export default class FieldInput extends React.Component {
         {icon ? <Icon active name={icon} primary /> : null}
         <Input
           autoCapitalize="none"
-          placeholderTextColor="#999999"
+          placeholderTextColor={colors.PLACEHOLDER}
+          selectionColor={colors.SELECTION}
           {...input}
           ref={this.props.refF}
           focus={this.focus}
+          underlineColorAndroid="red"
+          returnKeyLabel={returnKeyLabel}
           placeholder={label}
           secureTextEntry={secureTextEntry}
           keyboardType={keyboardType}

@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import Expo from "expo";
-import { Container, Content, Button, Text } from "native-base";
+import { Container, Content, Body, Button, Text } from "native-base";
 import { Image, View } from "react-native-animatable";
 import { Field, reduxForm } from "redux-form";
 import { connect } from "react-redux";
+import { Grid, Row } from "react-native-easy-grid";
 
 import fonts from "../../config/fonts";
 import images from "../../config/images";
@@ -31,59 +32,58 @@ class AuthScreen extends Component {
     }
     return (
       <Container>
-        <Content
-          contentContainerStyle={{
-            alignItems: "center"
-          }}
-          style={{ backgroundColor: "white" }}
-        >
-          <Image
-            animation={"bounceIn"}
-            ref={ref => (this.logoImgRef = ref)}
-            style={styles.logo}
-            source={images.logo}
-          />
-          <View
-            style={{
-              width: "90%"
-            }}
-          >
-            <Field
-              withRef
-              name="username"
-              ref={c => (this.usernameInputRef = c)}
-              keyboardType="numeric"
-              returnKeyType="next"
-              refF={"usernameInputRef"}
-              component={FieldInput}
-              onEnter={() =>
-                this.passwordInputRef
-                  .getRenderedComponent()
-                  .refs.passwordInputRef._root.focus()}
-              style={{ width: "80%" }}
-              label="Tài khoản"
-            />
-            <Field
-              withRef
-              ref={ref => (this.passwordInputRef = ref)}
-              refF={"passwordInputRef"}
-              name="password"
-              component={FieldInput}
-              label="Mật khẩu"
-              returnKeyType="done"
-              keyboardType="numeric"
-              onEnter={this.props.handleSubmit(this.submit.bind(this))}
-              secureTextEntry
-            />
-            <View animation={"bounceIn"} style={{ marginTop: 20 }}>
-              <Button
-                block
-                onPress={this.props.handleSubmit(this.submit.bind(this))}
-              >
-                <Text>Đăng nhập</Text>
-              </Button>
-            </View>
-          </View>
+        <Content style={styles.view.middleContent}>
+          <Grid style={[styles.grid.center, { marginTop: 30 }]}>
+            <Row>
+              <View style={{ width: "90%" }}>
+                <Body>
+                  <Image
+                    animation={"bounceIn"}
+                    ref={ref => (this.logoImgRef = ref)}
+                    style={styles.logo}
+                    source={images.logo}
+                  />
+                  <Field
+                    withRef
+                    name="username"
+                    ref={c => (this.usernameInputRef = c)}
+                    keyboardType="numeric"
+                    returnKeyType="next"
+                    returnKeyLabel="TIẾP"
+                    refF={"usernameInputRef"}
+                    component={FieldInput}
+                    onEnter={() =>
+                      this.passwordInputRef
+                        .getRenderedComponent()
+                        .refs.passwordInputRef._root.focus()}
+                    style={{ width: "80%" }}
+                    label="Tài khoản"
+                  />
+                  <Field
+                    withRef
+                    ref={ref => (this.passwordInputRef = ref)}
+                    refF={"passwordInputRef"}
+                    name="password"
+                    component={FieldInput}
+                    label="Mật khẩu"
+                    returnKeyLabel="ĐĂNG NHẬP"
+                    returnKeyType="done"
+                    keyboardType="numeric"
+                    onEnter={this.props.handleSubmit(this.submit.bind(this))}
+                    secureTextEntry
+                  />
+                </Body>
+                <View animation={"bounceIn"} style={{ marginTop: 20 }}>
+                  <Button
+                    block
+                    onPress={this.props.handleSubmit(this.submit.bind(this))}
+                  >
+                    <Text>Đăng nhập</Text>
+                  </Button>
+                </View>
+              </View>
+            </Row>
+          </Grid>
         </Content>
       </Container>
     );

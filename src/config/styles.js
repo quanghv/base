@@ -1,14 +1,67 @@
-import { StyleSheet } from "react-native";
+import { Platform } from "react-native";
 import metrics from "./metrics";
+import colors from "./colors";
 
-const styles = StyleSheet.create({
+export default {
+  view: {
+    middleContent: {
+      flex: 1,
+      backgroundColor: colors.WINDOW_BACKGROUND
+    },
+    listContent: {
+      flex: 1,
+      backgroundColor: colors.WINDOW_BACKGROUND,
+      padding: 15
+    }
+  },
   content: {
     flex: 1,
     backgroundColor: "white",
     padding: 15
   },
+  text: {
+    time: {
+      fontSize: Platform.OS === "ios" ? 10 : 12
+    },
+    center: {
+      textAlign: "center"
+    },
+    tryAgain: {
+      fontStyle: "italic"
+    },
+    error: {
+      color: "red"
+    }
+  },
+  grid: {
+    center: { alignItems: "center" }
+  },
+  icon: {
+    read: {
+      backgroundColor: "#888",
+      height: 10,
+      width: 10,
+      borderRadius: 5
+    },
+    unRead: {
+      backgroundColor: "#e21b0c",
+      height: 10,
+      width: 10,
+      borderRadius: 5
+    }
+  },
+  item: {
+    isRead: {
+      color: "#888",
+      paddingLeft: 10
+    },
+    isNotRead: {
+      paddingLeft: 10,
+      color: "#333",
+      fontWeight: "bold"
+    }
+  },
   logo: {
-    flex: 1,
     height: metrics.DEVICE_WIDTH * 0.3,
     width: metrics.DEVICE_WIDTH * 0.3,
     alignSelf: "center",
@@ -23,5 +76,4 @@ const styles = StyleSheet.create({
     color: "red",
     fontSize: 12
   }
-});
-export default styles;
+};
