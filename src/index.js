@@ -8,7 +8,7 @@ import getTheme from "../native-base-theme/components";
 import theme from "../native-base-theme/variables/commonColor";
 
 import allReducers from "./reducers";
-import MainStack from "./config/routes";
+import MainStack from "./containers/Router";
 
 const store = createStore(allReducers, applyMiddleware(thunk));
 
