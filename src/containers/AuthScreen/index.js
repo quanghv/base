@@ -119,7 +119,8 @@ class AuthScreen extends AppComponent {
     let btnSubmit = null;
     let modalMessage = null;
     let hasError = true;
-    let errorMessage = "adfffffffffff";
+    let errorMessage = config.message.network_error;
+    let iconMessage = "error";
     if (this.state.isLoading) {
       content = <Spinner />;
     } else {
@@ -132,13 +133,22 @@ class AuthScreen extends AppComponent {
         const message = this.props.accountInfo.error
           ? this.props.accountInfo.message
           : config.message.network_error;
+        iconMessage = "error";
         errorMessage = message;
         // this.renderApiResultModal(true, message);
         // this.renderApiErrorAlert(message, () =>
         //   this.setState({ isSubmitPressed: false })
         // );
       }
-      modalMessage = <ModalMessage visible={hasError} message={errorMessage} />;
+      const action = [{}]
+      modalMessage = (
+        <ModalMessage
+          visible={hasError}
+          message={errorMessage}
+          icon={iconMessage}
+          action={action}
+        />
+      );
       content = (
         <Body>
           <Field

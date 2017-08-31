@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, View, PixelRatio } from "react-native";
+import { Modal, View, PixelRatio, Image } from "react-native";
 import { Button, Text } from "native-base";
 import { Grid, Row } from "react-native-easy-grid";
 
@@ -11,6 +11,28 @@ const boxWidth =
 export default class ModalMessage extends React.Component {
   render() {
     console.log(boxWidth, "props");
+
+    let icMessage;
+    switch (this.props.icon) {
+      case "info":
+        icMessage = config.images.icWarningGray;
+        break;
+      case "warning":
+        icMessage = config.images.icWarning;
+        break;
+      case "success":
+        icMessage = config.images.icSuccess;
+        break;
+      case "error":
+        icMessage = config.images.icError;
+        break;
+      default:
+        icMessage = null;
+    }
+    const iconMessage = icMessage
+      ? <Image source={icMessage} style={styles.icon} />
+      : null;
+
     return (
       <Modal
         animationType={"fade"}
@@ -34,11 +56,12 @@ export default class ModalMessage extends React.Component {
                   elevation: 3,
                   borderRadius: 4,
                   borderWidth: 1 / PixelRatio.getPixelSizeForLayoutSize(1),
-                  paddingTop: 10,
+                  paddingVertical: 10,
                   paddingHorizontal: 15,
                   width: boxWidth
                 }}
               >
+                {iconMessage}
                 <Text style={styles.title}>
                   {this.props.title}
                 </Text>
@@ -48,18 +71,21 @@ export default class ModalMessage extends React.Component {
                 <View
                   style={{
                     flexDirection: "row",
-                    alignSelf: "flex-end",
+                    alignSelf: "center",
                     marginTop: 15
                   }}
                 >
-                  <Button transparent>
-                    <Text>
-                      {this.props.cancel}
+                  {/* <Button
+                    transparent
+                    style={[styles.button, styles.buttonCancel]}
+                  >
+                    <Text style={[styles.buttonText]}>
+                      {"Hủy"}
                     </Text>
-                  </Button>
-                  <Button transparent>
-                    <Text>
-                      {this.props.ok}
+                  </Button> */}
+                  <Button transparent style={[styles.button, styles.buttonOk]}>
+                    <Text style={styles.buttonText}>
+                      {this.props.ok ? this.props.ok : "Đồng ý"}
                     </Text>
                   </Button>
                 </View>
@@ -77,5 +103,26 @@ const styles = {
   title: {
     fontWeight: "bold",
     fontSize: 20
+  },
+  icon: {
+    marginTop: 15,
+    width: boxWidth / 4,
+    height: boxWidth / 4
+  },
+  button: {
+    width: 100,
+    borderRadius: 3,
+    marginHorizontal: 5
+  },
+  buttonText: {
+    flex: 1,
+    textAlign: "center",
+    color: "white"
+  },
+  buttonCancel: {
+    backgroundColor: config.colors.CANCEL_BACKGROUND
+  },
+  buttonOk: {
+    backgroundColor: config.colors.OK_BACKGROUND
   }
 };
