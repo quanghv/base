@@ -1,7 +1,15 @@
-import React from "react";
+import { connect } from "react-redux";
+import OrderScreen from "./index";
+import { dispatchDataFromApiGet } from "../../actions";
 
-export default class OrderConfirm extends React.Component {
-  render() {
-    return null;
-  }
+class OrderConfirm extends OrderScreen {}
+
+function mapStateToProps(state) {
+  return {
+    orderList: state.orderConfirmReducer
+  };
 }
+
+export default connect(mapStateToProps, { dispatchDataFromApiGet })(
+  OrderConfirm
+);

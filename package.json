@@ -19,6 +19,7 @@
     "preset": "jest-expo"
   },
   "dependencies": {
+    "@expo/vector-icons": "^5.2.0",
     "axios": "^0.16.2",
     "eslint-config-rallycoding": "^3.2.0",
     "expo": "^20.0.0",

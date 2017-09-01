@@ -52,7 +52,6 @@ class AuthScreen extends AppComponent {
     AsyncStorage.getItem(config.storages.ACCOUNT_ID).then(accountId => {
       //get userinfo from server
       if (accountId) {
-        // consoleLog(accountId);
         this.setState({ hadSession: true });
         this.props.dispatchDataFromApiGet(config.actionTypes.USER_INFO, {
           account_id: accountId
@@ -73,7 +72,6 @@ class AuthScreen extends AppComponent {
           const value = store[i][1];
           loggedArr[key] = value;
         });
-        // consoleLog(loggedArr);
         if (loggedArr && loggedArr[config.storages.ACCOUNT_ID]) {
           //dispatch loginReducre from Storage
           this.props.dispatchParams(
@@ -86,6 +84,7 @@ class AuthScreen extends AppComponent {
   }
 
   componentWillReceiveProps(nextProps) {
+    // this.logThis(nextProps, "props");
     if (nextProps.accountInfo) {
       if (nextProps.accountInfo.data) {
         this.setState({ isLoading: true });
@@ -98,7 +97,6 @@ class AuthScreen extends AppComponent {
   }
 
   setLoggedData = account => {
-    this.logThis(account, "account");
     const multiSets = [
       [config.storages.ACCOUNT_ID, account.id.toString()],
       [config.storages.ACCOUNT_ID, account.id.toString()],
@@ -108,7 +106,7 @@ class AuthScreen extends AppComponent {
   };
 
   submit = values => {
-    // console.log(values);
+    // this.logThis("onsubmit");
     this.setState({ isLoading: true, isSubmitPressed: true });
     const data = { phone: values.username, password: values.password };
     this.props.dispatchDataFromApiPost(config.actionTypes.LOGIN, data, null);
@@ -118,12 +116,13 @@ class AuthScreen extends AppComponent {
     let content;
     let btnSubmit = null;
     let modalMessage = null;
-    let hasError = true;
-    let errorMessage = config.message.network_error;
-    let iconMessage = "error";
+    let hasError = false;
+    let errorMessage;
+    let iconMessage;
     if (this.state.isLoading) {
       content = <Spinner />;
     } else {
+      // this.logThis(this.state, "auth");
       if (
         this.state.isSubmitPressed &&
         this.props.accountInfo &&
@@ -135,20 +134,20 @@ class AuthScreen extends AppComponent {
           : config.message.network_error;
         iconMessage = "error";
         errorMessage = message;
-        // this.renderApiResultModal(true, message);
-        // this.renderApiErrorAlert(message, () =>
-        //   this.setState({ isSubmitPressed: false })
-        // );
+        modalMessage = (
+          <ModalMessage
+            visible={hasError}
+            message={errorMessage}
+            icon={iconMessage}
+            action={[
+              {
+                text: "Đồng ý",
+                onPress: () => this.setState({ isSubmitPressed: false })
+              }
+            ]}
+          />
+        );
       }
-      const action = [{}]
-      modalMessage = (
-        <ModalMessage
-          visible={hasError}
-          message={errorMessage}
-          icon={iconMessage}
-          action={action}
-        />
-      );
       content = (
         <Body>
           <Field

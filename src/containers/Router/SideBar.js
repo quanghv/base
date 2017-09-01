@@ -1,5 +1,5 @@
 import React from "react";
-import { Platform, Image, Alert, AsyncStorage, View } from "react-native";
+import { Platform, Image, AsyncStorage, View } from "react-native";
 import {
   Text,
   Container,
@@ -17,10 +17,11 @@ import { dispatchDataFromApiPost, dispatchParams } from "../../actions";
 import actionTypes from "../../config/actionTypes";
 import storages from "../../config/storages";
 import images from "../../config/images";
+import ModalMessage from "../../components/ModalMessage";
 
 const routesPub = [
   {
-    label: "lang.Profile",
+    label: "Tài khoản",
     icon: "ios-information-circle-outline",
     screen: "Profile"
   },
@@ -30,7 +31,7 @@ const routesPub = [
     screen: "ChangePassword"
   },
   {
-    label: "lang.SignOut",
+    label: "Đăng xuất",
     icon: "ios-log-out-outline",
     screen: "Logout"
   }
@@ -38,39 +39,23 @@ const routesPub = [
 
 class SideBar extends React.Component {
   state = {
+    msgVisible: false,
     fullname: this.props.accountInfo[storages.ACCOUNT_FULLNAME],
     routes: routesPub
   };
 
-  async removeStorage() {
-    // console.log(this.props);
-    try {
-      await AsyncStorage.clear();
-      //this.props.clearData();
-      //   this.props.dispatchDataFromApiPost(constant.API.LOGOUT, {
-      //     account_id: this.props.accountInfo[constant.STORAGE.ACCOUNT.ID],
-      //     device_token: "device_token",
-      //     platform: Platform.OS === "ios" ? 1 : 2
-      //   });
-      //clear accountReducer
-      this.props.dispatchParams({ data: null }, actionTypes.LOGOUT);
-      this.props.navigation.navigate("LoginScreen");
-    } catch (error) {
-      console.log("error", error);
-    }
-  }
+  signOutPressed = async () => {
+    await AsyncStorage.clear();
+
+    this.props.dispatchParams({ data: null }, actionTypes.LOGOUT);
+    this.setState({ msgVisible: false });
+    this.props.navigation.navigate("AuthScreen");
+  };
 
   handleOnPress = screen => {
     if (screen === "Logout") {
-      Alert.alert("", "Bạn muốn thoát tài khoản?", [
-        { text: "Không" },
-        {
-          text: "Có",
-          onPress: () => {
-            this.removeStorage();
-          }
-        }
-      ]);
+      this.props.navigation.navigate("DrawerClose");
+      this.setState({ msgVisible: true });
     } else {
       setTimeout(() => this.props.navigation.navigate(screen), 0);
       this.props.navigation.navigate("DrawerClose");
@@ -80,6 +65,15 @@ class SideBar extends React.Component {
   render() {
     return (
       <Container>
+        <ModalMessage
+          visible={this.state.msgVisible}
+          message={"Bạn muốn thoát tài khoản?"}
+          icon={"warning"}
+          action={[
+            { text: "Không", type: "cancel" },
+            { text: "Có", onPress: () => this.signOutPressed(), type: "danger" }
+          ]}
+        />
         <Content>
           <View style={{ height: Platform.OS === "ios" ? 140 : 120 }}>
             <Image
