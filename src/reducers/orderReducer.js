@@ -33,3 +33,11 @@ export const orderCancelReducer = (state = null, action) => {
       return state;
   }
 };
+export const orderDetailReducer = (state = null, action) => {
+  switch (action.type) {
+    case actionTypes.ORDER_DETAIL:
+      return getResponseFromApi(action);
+    default:
+      return state;
+  }
+};

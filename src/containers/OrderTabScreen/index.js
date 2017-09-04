@@ -174,6 +174,7 @@ export default class OrderScreen extends AppComponent {
       this.state.isLoading,
       orderList,
       () => this.handleRefresh(),
+      null,
       this.state.page
     );
     if (view === null) {

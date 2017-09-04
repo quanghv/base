@@ -45,6 +45,7 @@ class OrderDetail extends AppComponent {
     super(props);
     // consoleLog(this.props.navigation.state.params);
     this.state = {
+      isLoading: true,
       selected1: this.props.navigation.state.params.selected,
       needToRefresh: false
     };
@@ -58,6 +59,10 @@ class OrderDetail extends AppComponent {
 
   componentWillReceiveProps(nextProps) {
     this.logThis("nextProps", nextProps);
+    const propsData = nextProps.orderDetail;
+    if (this.screenIsReady(propsData)) {
+      this.setState({ isLoading: false });
+    }
     // if (nextProps.orderDetail !== null && !nextProps.orderStatus) {
     //   this.setState({
     //     statusColor: this.getStatusColor(nextProps.orderDetail.info.status)
@@ -74,8 +79,7 @@ class OrderDetail extends AppComponent {
     //   }
     // });
     // consoleLog("componentDidUpdate");
-
-    this.props.resetOrderStatus();
+    // this.props.resetOrderStatus();
   }
 
   onValueChange = value => {
@@ -124,201 +128,211 @@ class OrderDetail extends AppComponent {
   };
 
   render() {
-    // console.log("props", this.props);
-    if (this.props.orderStatus !== null) {
-      Alert.alert("Thông báo", this.props.orderStatus.userMessage);
-    }
-    // consoleLog("changeOrderStatus", this.props.orderStatus);
-    let view = null;
-    if (this.props.getError) {
-      view = this.renderLoading(
-        <AppHeader needToRefresh={this.state.needToRefresh} />
-      );
-    } else if (this.props.isLoading) {
-      view = this.renderLoading(
-        <AppHeader needToRefresh={this.state.needToRefresh} />
-      );
-    } else if (this.props.orderDetail !== null) {
-      const orderObj = this.props.orderDetail.info;
-      let textNote = null;
-      if (orderObj.note !== null) {
-        textNote = (
-          <View>
-            <Text />
-            <Text style={styles.note}>
-              {orderObj.note}
-            </Text>
-          </View>
-        );
+    const propsData = this.props.orderDetail;
+    let view = this.handleRender(
+      this.state.isLoading,
+      propsData,
+      null,
+      <AppHeader needToRefresh={this.state.needToRefresh} />
+    );
+
+    if (view === null) {
+      // console.log("props", this.props);
+      if (this.props.orderStatus !== null) {
+        Alert.alert("Thông báo", this.props.orderStatus.userMessage);
       }
-      view = (
-        <Container>
-          <AppHeader
-            needToRefresh={this.state.needToRefresh}
-            nav={this.props.navigation}
-          />
-          <Content>
-            <View
-              style={{ flex: 1, paddingHorizontal: 10, paddingVertical: 5 }}
-            >
-              <Card>
-                <CardItem header>
-                  <Text>Tình trạng đơn hàng</Text>
-                </CardItem>
-                <Picker
-                  supportedOrientations={["portrait", "landscape"]}
-                  iosHeader="Select one"
-                  mode="dropdown"
-                  onValueChange={this.onValueChange}
-                  selectedValue={this.state.selected1}
-                  style={{
-                    color: this.getStatusColor(this.state.selected1),
-                    marginHorizontal: 10
-                  }}
-                >
-                  <Item
-                    label="CHỜ XÁC NHẬN"
-                    value={getStatusFromType(actionTypes.ORDER_CONFIRM)}
-                  />
-                  <Item
-                    label="CHỜ GIAO HÀNG"
-                    value={getStatusFromType(
-                      actionTypes.ORDER_CONFIRM_SHIPPING
-                    )}
-                  />
-                  <Item
-                    label="ĐANG GIAO HÀNG"
-                    value={getStatusFromType(actionTypes.ORDER_SHIPPING)}
-                  />
-                  <Item
-                    label="HOÀN THÀNH"
-                    value={getStatusFromType(actionTypes.ORDER_DONE)}
-                  />
-                  <Item
-                    label="TRẢ HÀNG/HOÀN TIỀN"
-                    value={getStatusFromType(actionTypes.ORDER_CANCEL)}
-                  />
-                  <Item
-                    label="ĐÃ HỦY"
-                    value={getStatusFromType(actionTypes.ORDER_USER_CANCEL)}
-                  />
-                </Picker>
-              </Card>
-              <Card>
-                <CardItem header>
-                  <Text>Thông tin khách hàng</Text>
-                </CardItem>
-                <CardItem>
-                  <Body>
-                    <Text bold>
-                      {orderObj.name}
-                    </Text>
-                    <Text>
-                      {orderObj.phone}
-                    </Text>
-                    <Text>
-                      {orderObj.address_full}
-                    </Text>
-                    {textNote}
-                  </Body>
-                </CardItem>
-              </Card>
-
-              <Card>
-                <CardItem header>
-                  <Text>Thông tin đơn hàng</Text>
-                </CardItem>
-                <CardItem>
-                  <Left style={{ left: -10 }}>
+      // consoleLog("changeOrderStatus", this.props.orderStatus);
+      let view = null;
+      if (this.props.getError) {
+        view = this.renderLoading(
+          <AppHeader needToRefresh={this.state.needToRefresh} />
+        );
+      } else if (this.props.isLoading) {
+        view = this.renderLoading(
+          <AppHeader needToRefresh={this.state.needToRefresh} />
+        );
+      } else if (this.props.orderDetail !== null) {
+        const orderObj = this.props.orderDetail.info;
+        let textNote = null;
+        if (orderObj.note !== null) {
+          textNote = (
+            <View>
+              <Text />
+              <Text style={styles.note}>
+                {orderObj.note}
+              </Text>
+            </View>
+          );
+        }
+        view = (
+          <Container>
+            <AppHeader
+              needToRefresh={this.state.needToRefresh}
+              nav={this.props.navigation}
+            />
+            <Content>
+              <View
+                style={{ flex: 1, paddingHorizontal: 10, paddingVertical: 5 }}
+              >
+                <Card>
+                  <CardItem header>
+                    <Text>Tình trạng đơn hàng</Text>
+                  </CardItem>
+                  <Picker
+                    supportedOrientations={["portrait", "landscape"]}
+                    iosHeader="Select one"
+                    mode="dropdown"
+                    onValueChange={this.onValueChange}
+                    selectedValue={this.state.selected1}
+                    style={{
+                      color: this.getStatusColor(this.state.selected1),
+                      marginHorizontal: 10
+                    }}
+                  >
+                    <Item
+                      label="CHỜ XÁC NHẬN"
+                      value={getStatusFromType(actionTypes.ORDER_CONFIRM)}
+                    />
+                    <Item
+                      label="CHỜ GIAO HÀNG"
+                      value={getStatusFromType(
+                        actionTypes.ORDER_CONFIRM_SHIPPING
+                      )}
+                    />
+                    <Item
+                      label="ĐANG GIAO HÀNG"
+                      value={getStatusFromType(actionTypes.ORDER_SHIPPING)}
+                    />
+                    <Item
+                      label="HOÀN THÀNH"
+                      value={getStatusFromType(actionTypes.ORDER_DONE)}
+                    />
+                    <Item
+                      label="TRẢ HÀNG/HOÀN TIỀN"
+                      value={getStatusFromType(actionTypes.ORDER_CANCEL)}
+                    />
+                    <Item
+                      label="ĐÃ HỦY"
+                      value={getStatusFromType(actionTypes.ORDER_USER_CANCEL)}
+                    />
+                  </Picker>
+                </Card>
+                <Card>
+                  <CardItem header>
+                    <Text>Thông tin khách hàng</Text>
+                  </CardItem>
+                  <CardItem>
                     <Body>
-                      <Text style={[styles.textLeft, styles.bold]}>
-                        Thời Gian
+                      <Text bold>
+                        {orderObj.name}
                       </Text>
-                      <Text style={[styles.textLeft, styles.bold]}>Mã</Text>
-                      <Text style={[styles.textLeft, styles.bold]}>
-                        Thành Tiền
+                      <Text>
+                        {orderObj.phone}
                       </Text>
-                      <Text />
-                      <Text style={styles.textLeft}>Đơn giá</Text>
-                      <Text style={styles.textLeft}>Phí vận chuyển</Text>
-                      <Text style={styles.textLeft}>Phí thu hộ</Text>
-                      <Text style={styles.textLeft}>Sử dụng M-coin</Text>
-                      <Text />
-                      <Text style={[styles.textLeft, styles.bold]}>
-                        Thanh Toán
+                      <Text>
+                        {orderObj.address_full}
                       </Text>
+                      {textNote}
                     </Body>
-                  </Left>
-                  <Right style={{ right: -10 }}>
-                    <Body>
-                      <Text
-                        numberOfLines={1}
-                        style={[styles.textRight, styles.textFocus]}
-                      >
-                        {this.handleTime(orderObj.update_time)}
-                      </Text>
-                      <Text style={[styles.textRight, styles.textFocus]}>
-                        {orderObj.code}
-                      </Text>
-                      <Text style={[styles.textRight, styles.textFocus]}>
-                        {orderObj.total_price}
-                      </Text>
-                      <Text />
-                      <Text style={styles.textRight}>
-                        {orderObj.order_price}
-                      </Text>
-                      <Text style={styles.textRight}>
-                        {orderObj.pvc_price}
-                      </Text>
-                      <Text style={styles.textRight}>
-                        {orderObj.cod_price}
-                      </Text>
-                      <Text style={styles.textRight}>
-                        {orderObj.account_point_use}
-                      </Text>
-                      <Text />
-                      <Text style={[styles.textRight, styles.textFocus]}>
-                        {orderObj.order_type === "chuyenkhoan"
-                          ? "Chuyển khoản"
-                          : "Khi nhận hàng"}
-                      </Text>
-                    </Body>
-                  </Right>
-                </CardItem>
-              </Card>
+                  </CardItem>
+                </Card>
 
-              <Card>
-                <CardItem header>
-                  <Text>Sản phẩm trong đơn hàng</Text>
-                </CardItem>
-                <List
-                  dataArray={this.props.orderDetail.list}
-                  renderRow={item =>
-                    <ListItem avatar>
-                      <Left>
-                        <Thumbnail square source={{ uri: item.img }} />
-                      </Left>
+                <Card>
+                  <CardItem header>
+                    <Text>Thông tin đơn hàng</Text>
+                  </CardItem>
+                  <CardItem>
+                    <Left style={{ left: -10 }}>
                       <Body>
-                        <Text>
-                          {item.name}
+                        <Text style={[styles.textLeft, styles.bold]}>
+                          Thời Gian
                         </Text>
-                        <Text>
-                          Số lượng: {item.number}
+                        <Text style={[styles.textLeft, styles.bold]}>Mã</Text>
+                        <Text style={[styles.textLeft, styles.bold]}>
+                          Thành Tiền
                         </Text>
-                        <Text>
-                          Giá: {item.price_2}
+                        <Text />
+                        <Text style={styles.textLeft}>Đơn giá</Text>
+                        <Text style={styles.textLeft}>Phí vận chuyển</Text>
+                        <Text style={styles.textLeft}>Phí thu hộ</Text>
+                        <Text style={styles.textLeft}>Sử dụng M-coin</Text>
+                        <Text />
+                        <Text style={[styles.textLeft, styles.bold]}>
+                          Thanh Toán
                         </Text>
                       </Body>
-                    </ListItem>}
-                  keyExtractor={item => item.id}
-                />
-              </Card>
-            </View>
-          </Content>
-        </Container>
-      );
-    } else {
-      view = this.renderNoData();
+                    </Left>
+                    <Right style={{ right: -10 }}>
+                      <Body>
+                        <Text
+                          numberOfLines={1}
+                          style={[styles.textRight, styles.textFocus]}
+                        >
+                          {this.handleTime(orderObj.update_time)}
+                        </Text>
+                        <Text style={[styles.textRight, styles.textFocus]}>
+                          {orderObj.code}
+                        </Text>
+                        <Text style={[styles.textRight, styles.textFocus]}>
+                          {orderObj.total_price}
+                        </Text>
+                        <Text />
+                        <Text style={styles.textRight}>
+                          {orderObj.order_price}
+                        </Text>
+                        <Text style={styles.textRight}>
+                          {orderObj.pvc_price}
+                        </Text>
+                        <Text style={styles.textRight}>
+                          {orderObj.cod_price}
+                        </Text>
+                        <Text style={styles.textRight}>
+                          {orderObj.account_point_use}
+                        </Text>
+                        <Text />
+                        <Text style={[styles.textRight, styles.textFocus]}>
+                          {orderObj.order_type === "chuyenkhoan"
+                            ? "Chuyển khoản"
+                            : "Khi nhận hàng"}
+                        </Text>
+                      </Body>
+                    </Right>
+                  </CardItem>
+                </Card>
+
+                <Card>
+                  <CardItem header>
+                    <Text>Sản phẩm trong đơn hàng</Text>
+                  </CardItem>
+                  <List
+                    dataArray={this.props.orderDetail.list}
+                    renderRow={item =>
+                      <ListItem avatar>
+                        <Left>
+                          <Thumbnail square source={{ uri: item.img }} />
+                        </Left>
+                        <Body>
+                          <Text>
+                            {item.name}
+                          </Text>
+                          <Text>
+                            Số lượng: {item.number}
+                          </Text>
+                          <Text>
+                            Giá: {item.price_2}
+                          </Text>
+                        </Body>
+                      </ListItem>}
+                    keyExtractor={item => item.id}
+                  />
+                </Card>
+              </View>
+            </Content>
+          </Container>
+        );
+      } else {
+        view = this.renderNoData();
+      }
     }
     return view;
   }
@@ -352,10 +366,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
-  orderDetail: state.orderDetail,
-  orderStatus: state.orderStatus,
-  getError: state.getError,
-  isLoading: state.isLoading
+  orderDetail: state.orderDetailReducer
 });
 
 export default connect(mapStateToProps, {

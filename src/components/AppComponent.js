@@ -20,7 +20,7 @@ export default class AppComponent extends Component {
     );
   };
 
-  handleRender = (isLoading, propsData, callback, page = 1) => {
+  handleRender = (isLoading, propsData, callback, header, page = 1) => {
     let view = null;
     if (isLoading) {
       view = this.renderLoading();
@@ -28,13 +28,13 @@ export default class AppComponent extends Component {
       view = this.renderNoData(
         propsData.message,
         callback,
-        null,
+        header,
         config.images.emptyCart
       );
     } else if (propsData.error) {
-      view = this.renderApiError(propsData.message, callback);
+      view = this.renderApiError(propsData.message, callback, header);
     } else if (propsData.networkError) {
-      view = this.renderNetworkError(callback);
+      view = this.renderNetworkError(callback, header);
     }
     return view;
   };
