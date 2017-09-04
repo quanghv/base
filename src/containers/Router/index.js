@@ -11,10 +11,11 @@ import { Footer, FooterTab, Button, Text } from "native-base";
 import SideBar from "./SideBar";
 
 import AuthScreen from "../AuthScreen";
-import OrderConfirm from "../TabScreen/OrderConfirm";
-import OrderShipping from "../TabScreen/OrderShipping";
-import OrderDone from "../TabScreen/OrderDone";
-import OrderCancel from "../TabScreen/OrderCancel";
+import OrderConfirm from "../OrderTabScreen/OrderConfirm";
+import OrderShipping from "../OrderTabScreen/OrderShipping";
+import OrderDone from "../OrderTabScreen/OrderDone";
+import OrderCancel from "../OrderTabScreen/OrderCancel";
+import OrderDetail from "../OrderDetail";
 
 const footers = [
   {
@@ -49,6 +50,7 @@ const TabNav = TabNavigator(
   },
   {
     tabBarPosition: "bottom",
+    lazy: true,
     tabBarComponent: props => {
       return (
         <Footer>
@@ -109,7 +111,8 @@ export default StackNavigator(
         header: null
       }
     },
-    DrawerNav: { screen: DrawerNav }
+    DrawerNav: { screen: DrawerNav },
+    OrderDetail: { screen: OrderDetail }
   },
   { headerMode: "none" }
 );

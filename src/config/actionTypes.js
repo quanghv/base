@@ -8,11 +8,12 @@ const actionTypes = {
   ORDER_DONE: "OrdeDone",
   ORDER_USER_CANCEL: "OrderUserCancel",
   ORDER_CANCEL: "OrderCancel",
+  ORDER_DETAIL: "OrderDetail",
   PARAMS: "Params"
 };
 
 export const getUrlFromType = type => {
-  const HOST = "http://m-shop.vn/";
+  const HOST = "http://m-shop.vn/1~1/";
   switch (type) {
     case actionTypes.LOGIN:
       return `${HOST}api-login`;
@@ -23,6 +24,8 @@ export const getUrlFromType = type => {
     case actionTypes.ORDER_DONE:
     case actionTypes.ORDER_CANCEL:
       return `${HOST}api-list-order?`;
+    case actionTypes.ORDER_DETAIL:
+      return `${HOST}api-order?`;
     default:
       break;
   }

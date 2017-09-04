@@ -6,6 +6,7 @@ import storages from "./storages";
 import styles from "./styles";
 import message from "./message";
 import metrics from "./metrics";
+import settings from "./settings";
 
 export default {
   actionTypes,
@@ -15,5 +16,6 @@ export default {
   storages,
   styles,
   message,
-  metrics
+  metrics,
+  settings
 };

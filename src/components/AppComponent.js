@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { View, Alert, AsyncStorage, Modal } from "react-native";
+import { View, Alert } from "react-native";
 import { Container, Text, Button, Body, Spinner, Thumbnail } from "native-base";
 import { Grid, Row } from "react-native-easy-grid";
-import { NavigationActions } from "react-navigation";
+// import { NavigationActions } from "react-navigation";
 import config from "../config";
 import { consoleLog } from "./AppLog";
 
@@ -10,23 +10,34 @@ export default class AppComponent extends Component {
   logThis = (str1, str2) => {
     consoleLog(str1, str2);
   };
-  async clearDataAndLogin() {
-    try {
-      await AsyncStorage.clear();
-      // consoleLog("clear");
-      const resetAction = NavigationActions.reset({
-        index: 0,
-        actions: [
-          NavigationActions.navigate({
-            routeName: "LoginScreen"
-          })
-        ]
-      });
-      this.props.navigation.dispatch(resetAction);
-    } catch (error) {
-      // consoleLog("error");
+
+  screenIsReady = propsData => {
+    return (
+      propsData &&
+      (propsData.status !== undefined ||
+        propsData.error ||
+        propsData.networkError)
+    );
+  };
+
+  handleRender = (isLoading, propsData, callback, page = 1) => {
+    let view = null;
+    if (isLoading) {
+      view = this.renderLoading();
+    } else if (propsData.empty && page === 1) {
+      view = this.renderNoData(
+        propsData.message,
+        callback,
+        null,
+        config.images.emptyCart
+      );
+    } else if (propsData.error) {
+      view = this.renderApiError(propsData.message, callback);
+    } else if (propsData.networkError) {
+      view = this.renderNetworkError(callback);
     }
-  }
+    return view;
+  };
   renderLoading = header =>
     <Container>
       {header}
@@ -67,7 +78,7 @@ export default class AppComponent extends Component {
             <Row>
               <View>
                 <Body>
-                  <Thumbnail source={image} />
+                  <Thumbnail square source={image} />
                   <Text />
                   <Text>
                     {message}
@@ -117,7 +128,7 @@ export default class AppComponent extends Component {
                   <Thumbnail source={image} />
                   <Text />
                   <Text style={config.styles.text.center}>
-                    {config.message.try_again}
+                    {config.message.network_error}
                   </Text>
                   {callbackBtn}
                 </Body>
@@ -173,31 +184,5 @@ export default class AppComponent extends Component {
 
   renderApiErrorAlert = (message, callback) => {
     this.renderApiResultAlert("Lỗi", message, callback);
-  };
-
-  renderApiResultModal = (modalVisible, message, callback) => {
-    return (
-      <Modal
-        animationType={"slide"}
-        transparent={false}
-        visible={modalVisible}
-        onRequestClose={() => {}}
-      >
-        <View style={{ marginTop: 22 }}>
-          <View>
-            <Text>
-              {message}
-            </Text>
-
-            <Button>
-              <Text>TEst</Text>
-            </Button>
-          </View>
-        </View>
-      </Modal>
-    );
-  };
-  renderApiErrorModal = (message, callback) => {
-    this.renderApiResultModal("Lỗi", message, callback);
   };
 }

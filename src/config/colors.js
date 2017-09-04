@@ -5,5 +5,5 @@ module.exports = {
   CANCEL_BACKGROUND: "#ccc",
   OK_BACKGROUND: "#5cb85c",
   DANGER_BACKGROUND: "#d9534f",
-  WINDOW_BACKGROUND: "white"
+  WINDOW_BACKGROUND: "#F0F0F0"
 };

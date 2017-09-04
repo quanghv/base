@@ -26,7 +26,7 @@ const routesPub = [
     screen: "Profile"
   },
   {
-    label: "lang.ChangePassword",
+    label: "Đổi mật khẩu",
     icon: "ios-lock-outline",
     screen: "ChangePassword"
   },
