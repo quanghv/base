@@ -73,9 +73,16 @@ export default class OrderDetailContainer extends AppComponent {
     let textNote = null;
     if (orderObj.note !== null) {
       textNote = (
-        <Text style={styles.note} selectable>
-          {orderObj.note}
-        </Text>
+        <ListItem avatar style={[config.styles.listItem, styles.lastItem]}>
+          <Left>
+            <SimpleLineIcons name="note" size={iconSize} />
+          </Left>
+          <Body>
+            <Text style={styles.note} selectable>
+              {orderObj.note}
+            </Text>
+          </Body>
+        </ListItem>
       );
     }
 
@@ -87,7 +94,12 @@ export default class OrderDetailContainer extends AppComponent {
         ? config.message.network_error
         : propsDataStatus.message;
       modalMessage = (
-        <ModalMessage visible message={userMessage} icon={iconMessage} viewAnimation={"pulse"} />
+        <ModalMessage
+          visible
+          message={userMessage}
+          icon={iconMessage}
+          viewAnimation={"pulse"}
+        />
       );
     }
     return (
@@ -197,14 +209,8 @@ export default class OrderDetailContainer extends AppComponent {
                 />
               </Right>
             </ListItem>
-            <ListItem avatar style={[config.styles.listItem, styles.lastItem]}>
-              <Left>
-                <SimpleLineIcons name="note" size={iconSize} />
-              </Left>
-              <Body>
-                {textNote}
-              </Body>
-            </ListItem>
+
+            {textNote}
             <ListItem itemDivider style={styles.itemDivider}>
               <Text>Thông tin thanh toán</Text>
             </ListItem>
