@@ -105,11 +105,15 @@ export default class ModalMessage extends React.Component {
         />
       : null;
 
-    console.log(this.state.visible, "state modal");
+    let { modalAnimation, viewAnimation, duration } = this.props;
+
+    modalAnimation = modalAnimation !== null ? modalAnimation : "fade";
+    viewAnimation = viewAnimation !== null ? viewAnimation : "bounce";
+    duration = duration !== null ? duration : 800;
 
     return (
       <Modal
-        animationType={"fade"}
+        animationType={modalAnimation}
         transparent
         visible={this.state.visible}
         onRequestClose={() => {}}
@@ -119,7 +123,8 @@ export default class ModalMessage extends React.Component {
             <Row />
             <Row>
               <Animatable.View
-                animation={"bounce"}
+                animation={viewAnimation}
+                duration={duration}
                 style={{
                   backgroundColor: "white",
                   alignItems: "center",

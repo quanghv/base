@@ -45,7 +45,6 @@ export default class OrderScreen extends AppComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.logThis(nextProps, "props");
     const propsData = nextProps.orderList;
     if (this.screenIsReady(propsData)) {
       this.setState({ isLoading: false });
@@ -61,12 +60,12 @@ export default class OrderScreen extends AppComponent {
               : [...this.state.data, ...propsData.data]
         });
       }
-      if (
-        (propsData.empty && this.state.page === 1) ||
-        (this.state.page > 1 && this.state.limit !== propsData.data.length)
-      ) {
-        this.setState({ endLoadMore: true });
-      }
+    }
+    if (
+      propsData.empty ||
+      (this.state.page > 1 && this.state.limit !== propsData.data.length)
+    ) {
+      this.setState({ endLoadMore: true });
     }
 
     if (nextProps.value) {
@@ -86,8 +85,6 @@ export default class OrderScreen extends AppComponent {
   }
 
   handleRefresh = () => {
-    // consoleLog("refreshing...");
-
     this.setState(
       {
         isLoading: true,
@@ -103,7 +100,6 @@ export default class OrderScreen extends AppComponent {
   };
 
   handleEndReached = () => {
-    // consoleLog(this.state.endLoadMore);
     if (!this.state.endLoadMore && !this.props.isLoading) {
       this.setState(
         {
@@ -119,7 +115,9 @@ export default class OrderScreen extends AppComponent {
   onOrderPress = item => {
     this.props.navigation.navigate("OrderDetail", {
       orderId: item.id,
-      selected: item.status,
+      status: item.status,
+      title: item.name,
+      subTitle: item.phone,
       refreshFunc: this.handleRefresh
     });
   };
@@ -147,7 +145,7 @@ export default class OrderScreen extends AppComponent {
     </Card>;
 
   renderFooter = () => {
-    if (this.state.data === undefined) return null;
+    if (this.state.data && this.state.data.length < 10) return null;
     if (!this.state.endLoadMore) {
       return (
         <View>
@@ -169,7 +167,6 @@ export default class OrderScreen extends AppComponent {
 
   render() {
     const orderList = this.props.orderList;
-    this.logThis(this.state, "data");
     let view = this.handleRender(
       this.state.isLoading,
       orderList,

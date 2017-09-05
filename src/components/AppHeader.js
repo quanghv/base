@@ -1,5 +1,5 @@
 import React from "react";
-import { Header, Body, Button, Icon, Title, Text } from "native-base";
+import { Header, Body, Button, Icon, Title, Text, Right } from "native-base";
 import Moment from "moment";
 // import AppDatePicker from "../components/AppDatePicker";
 import config from "../config";
@@ -69,6 +69,38 @@ export default class AppHeader extends React.Component {
   render() {
     let view = null;
 
+    let rightButton = null;
+    if (this.props.rightIcons) {
+      rightButton = (
+        <Right>
+          {this.props.rightIcons.map((value, index) => {
+            switch (value.name) {
+              case "funnel":
+                return this.renderFilter(value.name, value.dispatchType, index);
+              case "calendar":
+                return this.renderCalendar(
+                  value.maxDate,
+                  value.dispatchType,
+                  index
+                );
+              case "call":
+                return (
+                  <Button transparent key={index} onPress={value.callback}>
+                    <Text>GỌI</Text>
+                  </Button>
+                );
+              default:
+                return (
+                  <Button transparent key={index}>
+                    <Icon name={value.name} statusBar />
+                  </Button>
+                );
+            }
+          })}
+        </Right>
+      );
+    }
+
     if (this.props.isHome === "true") {
       view = (
         <Header>
@@ -88,6 +120,7 @@ export default class AppHeader extends React.Component {
                 : Moment(this.state.date).format("DD/MM/YYYY")}
             </Title>
           </Body>
+          {rightButton}
         </Header>
       );
     } else {
@@ -111,11 +144,14 @@ export default class AppHeader extends React.Component {
             </Title>
           </Body>
         );
+      } else {
+        title = <Body />;
       }
       view = (
         <Header>
           {this.goBack()}
           {title}
+          {rightButton}
         </Header>
       );
     }

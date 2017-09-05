@@ -3,6 +3,11 @@ import metrics from "./metrics";
 import colors from "./colors";
 
 export default {
+  header: {
+    title: {
+      color: "white"
+    }
+  },
   view: {
     middleContent: {
       flex: 1,
@@ -35,6 +40,14 @@ export default {
   },
   grid: {
     center: { alignItems: "center" }
+  },
+  list: {
+    marginLeft: 0
+  },
+  listItem: {
+    backgroundColor: "white",
+    paddingHorizontal: 15,
+    marginLeft: 0
   },
   icon: {
     read: {

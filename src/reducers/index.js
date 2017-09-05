@@ -7,7 +7,8 @@ import {
   orderShippingReducer,
   orderDoneReducer,
   orderCancelReducer,
-  orderDetailReducer
+  orderDetailReducer,
+  orderDetailStatusReducer
 } from "./orderReducer";
 
 const allReducers = combineReducers({
@@ -17,6 +18,7 @@ const allReducers = combineReducers({
   orderShippingReducer,
   orderDoneReducer,
   orderCancelReducer,
-  orderDetailReducer
+  orderDetailReducer,
+  orderDetailStatusReducer
 });
 export default allReducers;

@@ -41,6 +41,44 @@ const footers = [
   }
 ];
 
+const renderFooterTab = props => {
+  const view = footers.map((item, index) => {
+    const activeTab = props.navigationState.index === index;
+    const flex = activeTab ? 3 : 1;
+    const tabText = !activeTab
+      ? null
+      : <Text numberOfLines={1}>
+          {item.label}
+        </Text>;
+    const color = activeTab ? "white" : "#7857a6";
+    return (
+      <Button
+        style={{ flex }}
+        key={index}
+        full
+        active={activeTab}
+        onPress={() =>
+          activeTab ? null : props.navigation.navigate(item.screen)}
+      >
+        <MaterialIcons
+          name={item.icon}
+          size={Platform.OS === "ios" ? 26 : 24}
+          color={color}
+          style={{ marginBottom: 5 }}
+        />
+        {tabText}
+      </Button>
+    );
+  });
+  return (
+    <Footer>
+      <FooterTab>
+        {view}
+      </FooterTab>
+    </Footer>
+  );
+};
+
 const TabNav = TabNavigator(
   {
     OrderConfirm: { screen: OrderConfirm },
@@ -51,42 +89,7 @@ const TabNav = TabNavigator(
   {
     tabBarPosition: "bottom",
     lazy: true,
-    tabBarComponent: props => {
-      return (
-        <Footer>
-          <FooterTab>
-            {footers.map((item, index) => {
-              const activeTab = props.navigationState.index === index;
-              const flex = activeTab ? 3 : 1;
-              const tabText = !activeTab
-                ? null
-                : <Text numberOfLines={1}>
-                    {item.label}
-                  </Text>;
-              const color = activeTab ? "white" : "#7857a6";
-              return (
-                <Button
-                  style={{ flex }}
-                  key={index}
-                  full
-                  active={activeTab}
-                  onPress={() =>
-                    activeTab ? null : props.navigation.navigate(item.screen)}
-                >
-                  <MaterialIcons
-                    name={item.icon}
-                    size={Platform.OS === "ios" ? 26 : 24}
-                    color={color}
-                    style={{ marginBottom: 5 }}
-                  />
-                  {tabText}
-                </Button>
-              );
-            })}
-          </FooterTab>
-        </Footer>
-      );
-    }
+    tabBarComponent: props => renderFooterTab(props)
   }
 );
 

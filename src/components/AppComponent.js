@@ -21,9 +21,10 @@ export default class AppComponent extends Component {
   };
 
   handleRender = (isLoading, propsData, callback, header, page = 1) => {
+    // console.log(propsData, "AppComponent");
     let view = null;
     if (isLoading) {
-      view = this.renderLoading();
+      view = this.renderLoading(header);
     } else if (propsData.empty && page === 1) {
       view = this.renderNoData(
         propsData.message,
