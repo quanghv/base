@@ -8,7 +8,7 @@
     "loading": {
       "icon": "./src/images/logo.png",
       "hideExponentText": true,
-      "backgroundColor": "#e21b0c"
+      "backgroundColor": "#59348a"
     }
   }
 }

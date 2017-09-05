@@ -39,3 +39,13 @@ export const getResponseFromApi = action => {
 
   return response;
 };
+<<<<<<< HEAD
+=======
+
+export const getEmptyResponse = () => ({
+  data: null,
+  error: false,
+  networkError: false,
+  message: null
+});
+>>>>>>> 3c3cf64b6afc1e743f07f4a9f4b3759550f3cf2f
