@@ -1,9 +1,13 @@
 import actionTypes from "../config/actionTypes";
+import { getResponseFromApi } from "../helpers/reducerHelper";
 
 export const accountReducer = (state = null, action) => {
   switch (action.type) {
     case actionTypes.LOGIN:
-      return action.payload;
+    case actionTypes.USER_INFO:
+      return getResponseFromApi(action);
+    case actionTypes.LOGOUT:
+      return null;
     default:
       return state;
   }

@@ -14,7 +14,11 @@ import images from "../../config/images";
 import styles from "../../config/styles";
 import storages from "../../config/storages";
 import actionTypes from "../../config/actionTypes";
-import { dispatchDataFromApiPost } from "../../actions";
+import {
+  dispatchDataFromApiPost,
+  dispatchDataFromApiGet,
+  dispatchParams
+} from "../../actions";
 
 import AppComponent from "../../components/AppComponent";
 import FieldInput from "../../components/FieldInput";
@@ -53,11 +57,9 @@ class AuthScreen extends AppComponent {
       if (accountId) {
         // consoleLog(accountId);
         this.setState({ hadSession: true });
-        this.props.dispatchDataFromApiGet(
-          constant.API.USER_INFO,
-          { account_id: accountId },
-          constant.TYPES.API_USER_INFO
-        );
+        this.props.dispatchDataFromApiGet(actionTypes.USER_INFO, {
+          account_id: accountId
+        });
       } else {
         this.setState({ loading: false });
       }
@@ -79,7 +81,7 @@ class AuthScreen extends AppComponent {
           //dispatch loginReducre from Storage
           this.props.dispatchParams(
             { data: loggedArr, status: 1 },
-            constant.TYPES.API_USER_INFO
+            actionTypes.USER_INFO
           );
         } else this.setState({ loading: false });
       });
@@ -185,7 +187,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      dispatchDataFromApiPost
+      dispatchDataFromApiPost,
+      dispatchDataFromApiGet,
+      dispatchParams
     },
     dispatch
   );

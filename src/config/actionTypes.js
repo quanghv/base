@@ -1,5 +1,7 @@
 const actionTypes = {
   LOGIN: "SignIn",
+  LOGOUT: "SignOut",
+  USER_INFO: "UserInfo",
   PARAMS: "Params"
 };
 
