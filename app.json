@@ -17,6 +17,10 @@
     },
     "android": {
       "package": "vn.mshop.app"
+    },
+    "notification": {
+      "icon": "./src/images/ic_notification.png",
+      "color": "#59348a"
     }
   }
 }

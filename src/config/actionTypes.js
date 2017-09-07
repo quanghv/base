@@ -1,6 +1,7 @@
 const actionTypes = {
   LOGIN: "SignIn",
   LOGOUT: "SignOut",
+  TOKEN_REG: "TokenReg",
   USER_INFO: "UserInfo",
   ORDER_CONFIRM: "OrderConfirm",
   ORDER_CONFIRM_SHIPPING: "OrderConfirmShipping",
@@ -16,6 +17,8 @@ const actionTypes = {
 export const getUrlFromType = type => {
   const HOST = "http://m-shop.vn/1~1/";
   switch (type) {
+    case actionTypes.TOKEN_REG:
+      return `${HOST}api-token-reg`;
     case actionTypes.LOGIN:
       return `${HOST}api-login`;
     case actionTypes.USER_INFO:
