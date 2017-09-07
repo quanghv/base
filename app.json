@@ -3,6 +3,9 @@
     "name": "DEMO APP",
     "icon": "./src/images/logo.png",
     "sdkVersion": "20.0.0",
+    "version": "1.0.0",
+    "privacy": "unlisted",
+    "slug": "demo-app",
     "primaryColor": "#59348a",
     "androidStatusBarColor": "#351f53",
     "loading": {
@@ -13,6 +16,12 @@
     "notification": {
       "icon": "./src/images/ic_notification.png",
       "color": "#59348a"
+    },
+    "android": {
+      "package": "vn.mshop.app2"
+    },
+    "ios": {
+      "bundleIdentifier": "vn.mshop.app2"
     }
   }
 }
