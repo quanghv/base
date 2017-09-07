@@ -47,7 +47,7 @@ export const dispatchDataFromApiGet = (type, data, url) => dispatch => {
  * @param {*} type 
  */
 export const dispatchDataFromApiPost = (type, data, url) => dispatch => {
-    const actionUrl = url ? `${url}` : getUrlFromType(type);
+  const actionUrl = url ? `${url}` : getUrlFromType(type);
   consoleLog(actionUrl, type);
   consoleLog(data, type);
   axios
@@ -64,4 +64,17 @@ export const dispatchDataFromApiPost = (type, data, url) => dispatch => {
 
 export const dispatchParams = (data, type) => dispatch => {
   dispatch(responseFromApi(data, type !== null ? type : actionTypes.PARAMS));
+};
+
+export const postToServer = (actionUrl, data) => {
+  consoleLog(data, actionUrl);
+  axios
+    .post(actionUrl, data)
+    .then(response => {
+      consoleLog(response, "responsePostToServer");
+      return response;
+    })
+    .catch(error => {
+      consoleLog("networkError", error);
+    });
 };

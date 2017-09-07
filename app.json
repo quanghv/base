@@ -9,6 +9,10 @@
       "icon": "./src/images/logo.png",
       "hideExponentText": true,
       "backgroundColor": "#59348a"
+    },
+    "notification": {
+      "icon": "./src/images/ic_notification.png",
+      "color": "#59348a"
     }
   }
 }

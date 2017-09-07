@@ -1,6 +1,6 @@
 import React from "react";
-import { AsyncStorage, BackHandler } from "react-native";
-import Expo from "expo";
+import { Platform, AsyncStorage, BackHandler } from "react-native";
+import Expo, { Permissions, Notifications } from "expo";
 import { Container, Content, Body, Button, Text, Spinner } from "native-base";
 import { Image, View } from "react-native-animatable";
 import { Field, reduxForm } from "redux-form";
@@ -10,10 +10,12 @@ import { Grid, Row } from "react-native-easy-grid";
 import { NavigationActions } from "react-navigation";
 
 import config from "../../config";
+import { getUrlFromType } from "../../config/actionTypes";
 import {
   dispatchDataFromApiPost,
   dispatchDataFromApiGet,
-  dispatchParams
+  dispatchParams,
+  postToServer
 } from "../../actions";
 
 import AppComponent from "../../components/AppComponent";
@@ -27,7 +29,8 @@ class AuthScreen extends AppComponent {
     BackHandler.exitApp();
   };
 
-  goToMainPage = () => {
+  goToMainPage = async accountId => {
+    await this.registerForPushNotificationsAsync(accountId);
     const resetAction = NavigationActions.reset({
       index: 0,
       actions: [
@@ -40,14 +43,15 @@ class AuthScreen extends AppComponent {
   };
 
   async componentWillMount() {
-    await Expo.Font.loadAsync({
-      Roboto: config.fonts.Roboto,
-      Roboto_medium: config.fonts.Roboto_medium
-    });
-    // this.setState({ isLoading: false });
-
     //no goBack from loginScreen
     BackHandler.addEventListener("hardwareBackPress", this.handleBackPress);
+
+    if (Platform.OS === "android") {
+      await Expo.Font.loadAsync({
+        Roboto: config.fonts.Roboto,
+        Roboto_medium: config.fonts.Roboto_medium
+      });
+    }
 
     AsyncStorage.getItem(config.storages.ACCOUNT_ID).then(accountId => {
       //get userinfo from server
@@ -61,6 +65,34 @@ class AuthScreen extends AppComponent {
       }
     });
   }
+
+  registerForPushNotificationsAsync = async accountId => {
+    const { existingStatus } = await Permissions.getAsync(
+      Permissions.NOTIFICATIONS
+    );
+    let finalStatus = existingStatus;
+
+    // only ask if permissions have not already been determined, because
+    // iOS won't necessarily prompt the user a second time.
+    if (existingStatus !== "granted") {
+      // Android remote notification permissions are granted during the app
+      // install, so this will only ask on iOS
+      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+      finalStatus = status;
+    }
+
+    // Stop here if the user did not grant permissions
+    if (finalStatus !== "granted") {
+      return;
+    }
+
+    // Get the token that uniquely identifies this device
+    const token = await Notifications.getExpoPushTokenAsync();
+    postToServer(getUrlFromType(config.actionTypes.TOKEN_REG), {
+      id: accountId,
+      token
+    });
+  };
 
   async getLoggedData() {
     AsyncStorage.getAllKeys((err, keys) => {
@@ -84,23 +116,30 @@ class AuthScreen extends AppComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    // this.logThis(nextProps, "props");
+    this.logThis(nextProps, "props");
     if (nextProps.accountInfo) {
       if (nextProps.accountInfo.data) {
         this.setState({ isLoading: true });
         //login successfull
         this.setLoggedData(nextProps.accountInfo.data);
-        this.goToMainPage();
+        const accountId =
+          nextProps.accountInfo.data[config.storages.ACCOUNT_ID];
+        this.goToMainPage(accountId);
       } else if (this.state.hadSession) this.getLoggedData();
       else this.setState({ isLoading: false });
     }
   }
 
   setLoggedData = account => {
+    this.logThis(account);
     const multiSets = [
       [config.storages.ACCOUNT_ID, account.id.toString()],
-      [config.storages.ACCOUNT_ID, account.id.toString()],
-      [config.storages.ACCOUNT_ID, account.id.toString()]
+      [config.storages.ACCOUNT_FULLNAME, account.fullname.toString()],
+      [config.storages.ACCOUNT_PHONE, account.phone.toString()],
+      [
+        config.storages.ACCOUNT_IMAGE,
+        account.img !== null ? account.img.toString() : ""
+      ]
     ];
     AsyncStorage.multiSet(multiSets);
   };
