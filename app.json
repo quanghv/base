@@ -1,14 +1,22 @@
 {
   "expo": {
-    "name": "DEMO APP",
-    "icon": "./src/images/logo.png",
+    "name": "M-SHOP.VN",
+    "icon": "./src/images/ic_app.png",
     "sdkVersion": "20.0.0",
+    "version": "1.0.0",
+    "slug": "m-shop-vn",
     "primaryColor": "#59348a",
     "androidStatusBarColor": "#351f53",
     "loading": {
       "icon": "./src/images/logo.png",
       "hideExponentText": true,
       "backgroundColor": "#59348a"
+    },
+    "ios": {
+      "bundleIdentifier": "vn.mshop.app"
+    },
+    "android": {
+      "package": "vn.mshop.app"
     }
   }
 }

@@ -102,6 +102,13 @@ export default class OrderDetailContainer extends AppComponent {
         />
       );
     }
+    const pickerColor =
+      Platform.OS === "ios"
+        ? null
+        : {
+            color: this.getStatusColor(currentStatus),
+            marginHorizontal: 10
+          };
     return (
       <Container>
         {header}
@@ -117,10 +124,7 @@ export default class OrderDetailContainer extends AppComponent {
               mode="dropdown"
               onValueChange={value => onChangeStatus(value)}
               selectedValue={currentStatus}
-              style={{
-                color: this.getStatusColor(currentStatus),
-                marginHorizontal: 10
-              }}
+              style={pickerColor}
             >
               <Item
                 label="CHỜ XÁC NHẬN"
@@ -219,9 +223,7 @@ export default class OrderDetailContainer extends AppComponent {
                 <MaterialIcons name="attach-money" size={iconSize} />
               </Left>
               <Body>
-                <Text>
-                  {moneyFormat(orderObj.total_price)}
-                </Text>
+                <Text>{moneyFormat(orderObj.total_price)}</Text>
               </Body>
             </ListItem>
             <ListItem icon style={[config.styles.listItem, styles.lastItem]}>
@@ -230,9 +232,11 @@ export default class OrderDetailContainer extends AppComponent {
               </Left>
               <Body>
                 <Text>
-                  {orderObj.order_type === "chuyenkhoan"
-                    ? "Thanh toán chuyển khoản"
-                    : "Thanh toán khi nhận hàng"}
+                  {orderObj.order_type === "chuyenkhoan" ? (
+                    "Thanh toán chuyển khoản"
+                  ) : (
+                    "Thanh toán khi nhận hàng"
+                  )}
                 </Text>
               </Body>
             </ListItem>
@@ -245,9 +249,7 @@ export default class OrderDetailContainer extends AppComponent {
               <MaterialCommunityIcons name="calendar-clock" size={iconSize} />
             </Left>
             <Body>
-              <Text>
-                {this.handleTime(orderObj.update_time)}
-              </Text>
+              <Text>{this.handleTime(orderObj.update_time)}</Text>
             </Body>
           </ListItem>
           <ListItem icon style={config.styles.listItem}>
@@ -255,30 +257,23 @@ export default class OrderDetailContainer extends AppComponent {
               <FontAwesome name="barcode" size={iconSize} />
             </Left>
             <Body>
-              <Text>
-                {orderObj.code}
-              </Text>
+              <Text>{orderObj.code}</Text>
             </Body>
           </ListItem>
           <List
             dataArray={propsData.data.list}
-            renderRow={item =>
+            renderRow={item => (
               <ListItem avatar style={config.styles.listItem}>
                 <Left>
                   <Thumbnail square source={{ uri: item.img }} />
                 </Left>
                 <Body>
-                  <Text>
-                    {item.name}
-                  </Text>
-                  <Text>
-                    Số lượng: {item.number}
-                  </Text>
-                  <Text>
-                    Giá: {item.price_2}
-                  </Text>
+                  <Text>{item.name}</Text>
+                  <Text>Số lượng: {item.number}</Text>
+                  <Text>Giá: {item.price_2}</Text>
                 </Body>
-              </ListItem>}
+              </ListItem>
+            )}
             keyExtractor={item => item.id}
           />
           <List>
@@ -290,9 +285,7 @@ export default class OrderDetailContainer extends AppComponent {
                 <Text>Đơn giá</Text>
               </Body>
               <Right>
-                <Text note>
-                  {moneyFormat(orderObj.order_price, "")}
-                </Text>
+                <Text note>{moneyFormat(orderObj.order_price, "")}</Text>
               </Right>
             </ListItem>
             <ListItem icon style={config.styles.listItem}>
@@ -300,9 +293,7 @@ export default class OrderDetailContainer extends AppComponent {
                 <Text>Phí vận chuyển</Text>
               </Body>
               <Right>
-                <Text note>
-                  {moneyFormat(orderObj.pvc_price, "")}
-                </Text>
+                <Text note>{moneyFormat(orderObj.pvc_price, "")}</Text>
               </Right>
             </ListItem>
             <ListItem icon style={config.styles.listItem}>
@@ -310,9 +301,7 @@ export default class OrderDetailContainer extends AppComponent {
                 <Text>Phí thu hộ</Text>
               </Body>
               <Right>
-                <Text note>
-                  {moneyFormat(orderObj.cod_price, "")}
-                </Text>
+                <Text note>{moneyFormat(orderObj.cod_price, "")}</Text>
               </Right>
             </ListItem>
             <ListItem icon style={config.styles.listItem}>
@@ -320,9 +309,7 @@ export default class OrderDetailContainer extends AppComponent {
                 <Text>Sử dụng Mcoin</Text>
               </Body>
               <Right>
-                <Text note>
-                  {moneyFormat(orderObj.account_point_use, "")}
-                </Text>
+                <Text note>{moneyFormat(orderObj.account_point_use, "")}</Text>
               </Right>
             </ListItem>
           </List>

@@ -140,13 +140,13 @@ export default {
   activeTab: platform === "ios" ? "#007aff" : "#fff",
   sTabBarActiveTextColor: "#007aff",
   tabBarActiveTextColor: "#fff",
-  tabActiveBgColor: platform === "ios" ? "#1569f4" : undefined,
+  tabActiveBgColor: platform === "ios" ? colors.PRIMARY : undefined,
 
   // Tab
   tabDefaultBg: colors.PRIMARY,
   topTabBarTextColor: "#b3c7f9",
   topTabBarActiveTextColor: "#fff",
-  topTabActiveBgColor: platform === "ios" ? "#1569f4" : undefined,
+  topTabActiveBgColor: platform === "ios" ? colors.PRIMARY : undefined,
   topTabBarBorderColor: "#fff",
   topTabBarActiveBorderColor: "#fff",
 
@@ -163,7 +163,7 @@ export default {
   iosStatusbar: "light-content",
   toolbarDefaultBorder: colors.PRIMARY,
   get statusBarColor() {
-    return color(this.toolbarDefaultBg).darken(0.2).hex();
+    return color(this.toolbarDefaultBg).darken(0.2).hexString();
   },
 
   // Icon
@@ -230,7 +230,7 @@ export default {
   radioColor: "#7e7e7e",
 
   get radioSelectedColor() {
-    return color(this.radioColor).darken(0.2).hex();
+    return color(this.radioColor).darken(0.2).hexString();
   },
 
   // Spinner
@@ -267,7 +267,7 @@ export default {
   },
 
   get darkenHeader() {
-    return color(this.tabBgColor).darken(0.03).hex();
+    return color(this.tabBgColor).darken(0.03).hexString();
   },
 
   dropdownBg: "#000",
