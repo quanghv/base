@@ -68,9 +68,7 @@ export default class ModalMessage extends React.Component {
               key={index}
               {...propsBtn}
             >
-              <Text {...propsBtnText}>
-                {value.text ? value.text : "OK"}
-              </Text>
+              <Text {...propsBtnText}>{value.text ? value.text : "OK"}</Text>
             </Button>
           );
         })}
@@ -96,14 +94,14 @@ export default class ModalMessage extends React.Component {
       default:
         icMessage = null;
     }
-    const iconMessage = icMessage
-      ? <Animatable.Image
-          animation={"zoomIn"}
-          delay={1}
-          source={icMessage}
-          style={styles.icon}
-        />
-      : null;
+    const iconMessage = icMessage ? (
+      <Animatable.Image
+        animation={"zoomIn"}
+        delay={1}
+        source={icMessage}
+        style={styles.icon}
+      />
+    ) : null;
 
     let { modalAnimation, viewAnimation, duration } = this.props;
 
@@ -114,6 +112,7 @@ export default class ModalMessage extends React.Component {
     return (
       <Modal
         animationType={modalAnimation}
+        duration={300}
         transparent
         visible={this.state.visible}
         onRequestClose={() => {}}
@@ -142,12 +141,8 @@ export default class ModalMessage extends React.Component {
                 }}
               >
                 {iconMessage}
-                <Text style={styles.title}>
-                  {this.props.title}
-                </Text>
-                <Text style={{ marginVertical: 20 }}>
-                  {this.props.message}
-                </Text>
+                <Text style={styles.title}>{this.props.title}</Text>
+                <Text style={{ marginVertical: 20 }}>{this.props.message}</Text>
                 {this.renderButtonAction()}
               </Animatable.View>
             </Row>

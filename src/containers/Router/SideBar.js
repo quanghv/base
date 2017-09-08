@@ -41,6 +41,8 @@ class SideBar extends React.Component {
   state = {
     msgVisible: false,
     fullname: this.props.accountInfo[storages.ACCOUNT_FULLNAME],
+    accountImg: this.props.accountInfo[storages.ACCOUNT_IMAGE],
+    nickname: this.props.accountInfo[storages.ACCOUNT_NICKNAME],
     routes: routesPub
   };
 
@@ -70,7 +72,11 @@ class SideBar extends React.Component {
           message={"Bạn muốn thoát tài khoản?"}
           icon={"warning"}
           action={[
-            { text: "Không", type: "cancel" },
+            {
+              text: "Không",
+              type: "cancel",
+              onPress: () => this.setState({ msgVisible: false })
+            },
             { text: "Có", onPress: () => this.signOutPressed(), type: "danger" }
           ]}
         />
@@ -86,13 +92,16 @@ class SideBar extends React.Component {
             />
             <View style={styles.fade} />
             <View style={styles.schoolView}>
-              <Thumbnail circular source={this.state.logo} />
+              <Thumbnail
+                circular
+                source={
+                  this.state.accountImg ? { uri: this.state.accountImg } : null
+                }
+              />
               <Text style={[styles.titleText, styles.avtText]}>
                 {this.state.fullname}
               </Text>
-              <Text style={styles.titleText}>
-                {this.state.schoolName}
-              </Text>
+              <Text style={styles.subTitleText}>@{this.state.nickname}</Text>
             </View>
           </View>
           <ListItem itemDivider>
@@ -100,7 +109,7 @@ class SideBar extends React.Component {
           </ListItem>
           <List
             dataArray={this.state.routes}
-            renderRow={data =>
+            renderRow={data => (
               <ListItem
                 icon
                 button
@@ -110,11 +119,10 @@ class SideBar extends React.Component {
                   <Icon primary name={data.icon} />
                 </Left>
                 <Body>
-                  <Text>
-                    {data.label}
-                  </Text>
+                  <Text>{data.label}</Text>
                 </Body>
-              </ListItem>}
+              </ListItem>
+            )}
           />
         </Content>
       </Container>
@@ -138,6 +146,11 @@ const styles = {
   titleText: {
     color: "white",
     backgroundColor: "transparent"
+  },
+  subTitleText: {
+    color: "#f0f0f0",
+    backgroundColor: "transparent",
+    fontStyle: "italic"
   },
   avatar: {
     width: 50,

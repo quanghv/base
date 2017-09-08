@@ -134,12 +134,19 @@ class AuthScreen extends AppComponent {
     this.logThis(account);
     const multiSets = [
       [config.storages.ACCOUNT_ID, account.id.toString()],
-      [config.storages.ACCOUNT_FULLNAME, account.fullname.toString()],
-      [config.storages.ACCOUNT_PHONE, account.phone.toString()],
       [
-        config.storages.ACCOUNT_IMAGE,
-        account.img !== null ? account.img.toString() : ""
-      ]
+        config.storages.ACCOUNT_FULLNAME,
+        account.fullname ? account.fullname.toString() : ""
+      ],
+      [
+        config.storages.ACCOUNT_PHONE,
+        account.phone ? account.phone.toString() : ""
+      ],
+      [
+        config.storages.ACCOUNT_NICKNAME,
+        account.nickname ? account.nickname.toString() : ""
+      ],
+      [config.storages.ACCOUNT_IMAGE, account.img ? account.img.toString() : ""]
     ];
     AsyncStorage.multiSet(multiSets);
   };

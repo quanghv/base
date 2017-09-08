@@ -1,4 +1,4 @@
-import logo from "../images/logo.png";
+import logo from "../images/logo_primary.png";
 import navigation from "../images/navigation.jpg";
 import error from "../images/error.png";
 import noConnection from "../images/no_connection.png";

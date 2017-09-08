@@ -5,6 +5,7 @@
     "sdkVersion": "20.0.0",
     "version": "1.0.0",
     "slug": "m-shop-vn",
+    "privacy": "unlisted",
     "primaryColor": "#59348a",
     "androidStatusBarColor": "#351f53",
     "loading": {

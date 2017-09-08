@@ -28,7 +28,14 @@ export default class Main extends React.Component {
   }
 
   _handleNotification = notification => {
-    console.log(notification, "notification");
+    // console.log(notification, "notification");
+    const notificationData = notification.data;
+    this.navigator._navigation.navigate("OrderDetail", {
+      orderId: notificationData.id,
+      status: notificationData.status,
+      title: notificationData.name,
+      subTitle: notificationData.phone
+    });
     // this.setState({ notification });
   };
 
@@ -43,11 +50,16 @@ export default class Main extends React.Component {
   }
 
   render() {
+    console.log(this.props, "props");
     return (
       <Provider store={store}>
         <StyleProvider style={getTheme(theme)}>
           <Root>
-            <MainStack />
+            <MainStack
+              ref={nav => {
+                this.navigator = nav;
+              }}
+            />
           </Root>
         </StyleProvider>
       </Provider>

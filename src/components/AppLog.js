@@ -1,5 +1,5 @@
 const constant = {
-  DEBUG: true
+  DEBUG: false
 };
 
 /**
