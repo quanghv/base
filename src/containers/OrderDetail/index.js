@@ -1,13 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
-import { BackHandler, Linking } from "react-native";
+import { Linking } from "react-native";
 
 import AppComponent from "../../components/AppComponent";
 import AppHeader from "../../components/AppHeader";
 import actionTypes from "../../config/actionTypes";
 import config from "../../config";
 
-import OrderDetailContainer from "./Container";
+import OrderDetailContainer from "./container";
 
 import {
   dispatchDataFromApiGet,
@@ -27,14 +27,6 @@ class OrderDetail extends AppComponent {
   }
 
   componentWillMount() {
-    BackHandler.addEventListener("hardwareBackPress", () => {
-      //   if (this.state.needToRefresh) {
-      //     prevProps.navigation.state.params.refreshFunc();
-      //     prevProps.navigation.goBack();
-      //   }
-    //   console.log("back");
-      this.props.navigation.goBack();
-    });
     this.getData();
   }
 

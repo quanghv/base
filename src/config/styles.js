@@ -9,6 +9,13 @@ export default {
     }
   },
   view: {
+    circle: {
+      borderRadius: 100 / 2,
+      padding: 10,
+      borderWidth: 1,
+      alignContent: "center",
+      alignItems: "center"
+    },
     middleContent: {
       flex: 1,
       backgroundColor: colors.WINDOW_BACKGROUND
@@ -43,6 +50,9 @@ export default {
   },
   list: {
     marginLeft: 0
+  },
+  transparent: {
+    backgroundColor: "transparent"
   },
   listItem: {
     backgroundColor: "white",
