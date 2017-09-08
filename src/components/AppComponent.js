@@ -20,17 +20,25 @@ export default class AppComponent extends Component {
     );
   };
 
-  handleRender = (isLoading, propsData, callback, header, page = 1) => {
+  handleRender = (
+    isLoading,
+    propsData,
+    callback,
+    header,
+    page = 1,
+    msgNoData,
+    imgNoData
+  ) => {
     // console.log(propsData, "AppComponent");
     let view = null;
     if (isLoading) {
       view = this.renderLoading(header);
     } else if (propsData.empty && page === 1) {
       view = this.renderNoData(
-        propsData.message,
+        msgNoData != null ? msgNoData : propsData.message,
         callback,
         header,
-        config.images.emptyCart
+        imgNoData != null ? imgNoData : config.images.emptyCart
       );
     } else if (propsData.error) {
       view = this.renderApiError(propsData.message, callback, header);
@@ -39,7 +47,7 @@ export default class AppComponent extends Component {
     }
     return view;
   };
-  renderLoading = header =>
+  renderLoading = header => (
     <Container>
       {header}
       <View style={config.styles.view.middleContent}>
@@ -50,26 +58,25 @@ export default class AppComponent extends Component {
               <Body>
                 <Spinner />
                 <Text />
-                <Text>
-                  {config.message.loading}
-                </Text>
+                <Text>{config.message.loading}</Text>
               </Body>
             </View>
           </Row>
           <Row />
         </Grid>
       </View>
-    </Container>;
+    </Container>
+  );
 
   renderNoData = (message, callback, header, image = config.images.noData) => {
     // consoleLog("noDATA", this);
-    const callbackBtn = callback
-      ? <Button block transparent onPress={callback}>
-          <Text primary style={config.styles.text.tryAgain}>
-            {config.message.try_again}
-          </Text>
-        </Button>
-      : null;
+    const callbackBtn = callback ? (
+      <Button block transparent onPress={callback}>
+        <Text primary style={config.styles.text.tryAgain}>
+          {config.message.try_again}
+        </Text>
+      </Button>
+    ) : null;
     return (
       <Container>
         {header}
@@ -79,11 +86,13 @@ export default class AppComponent extends Component {
             <Row>
               <View>
                 <Body>
-                  <Thumbnail square source={image} />
+                  {image === config.images.emptyCart ? (
+                    <Thumbnail square source={image} />
+                  ) : (
+                    image
+                  )}
                   <Text />
-                  <Text>
-                    {message}
-                  </Text>
+                  <Text style={{ color: "gray" }}>{message}</Text>
                   <Text />
                   {callbackBtn}
                 </Body>
@@ -108,14 +117,14 @@ export default class AppComponent extends Component {
     image = config.images.noConnection
   ) => {
     // consoleLog("network error", callback);
-    const callbackBtn = callback
-      ? <Button block transparent onPress={callback}>
-          {/* <Icon name="refresh" style={{ fontSize: 12 }} /> */}
-          <Text primary style={config.styles.text.tryAgain}>
-            {config.message.try_again}
-          </Text>
-        </Button>
-      : null;
+    const callbackBtn = callback ? (
+      <Button block transparent onPress={callback}>
+        {/* <Icon name="refresh" style={{ fontSize: 12 }} /> */}
+        <Text primary style={config.styles.text.tryAgain}>
+          {config.message.try_again}
+        </Text>
+      </Button>
+    ) : null;
 
     return (
       <Container>
@@ -144,13 +153,13 @@ export default class AppComponent extends Component {
 
   renderApiError = (message, callback, header, image = config.images.error) => {
     // consoleLog("network error", callback);
-    const callbackBtn = callback
-      ? <Button block transparent onPress={callback}>
-          <Text primary style={config.styles.text.tryAgain}>
-            {config.message.try_again}
-          </Text>
-        </Button>
-      : null;
+    const callbackBtn = callback ? (
+      <Button block transparent onPress={callback}>
+        <Text primary style={config.styles.text.tryAgain}>
+          {config.message.try_again}
+        </Text>
+      </Button>
+    ) : null;
 
     return (
       <Container>

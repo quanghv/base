@@ -24,6 +24,7 @@ export const getUrlFromType = type => {
     case actionTypes.USER_INFO:
       return `${HOST}api-user-info`;
     case actionTypes.ORDER_CONFIRM:
+    case actionTypes.ORDER_CONFIRM_SHIPPING:
     case actionTypes.ORDER_SHIPPING:
     case actionTypes.ORDER_DONE:
     case actionTypes.ORDER_CANCEL:

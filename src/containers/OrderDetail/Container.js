@@ -71,7 +71,7 @@ export default class OrderDetailContainer extends AppComponent {
     const iconSize = Platform.OS === "ios" ? 24 : 20;
     const orderObj = propsData.data.info;
     let textNote = null;
-    if (orderObj.note !== null) {
+    if (orderObj.note) {
       textNote = (
         <ListItem avatar style={[config.styles.listItem, styles.lastItem]}>
           <Left>
