@@ -196,7 +196,19 @@ export default class OrderDetailContainer extends AppComponent {
             </ListItem>
             <ListItem avatar style={config.styles.listItem}>
               <Left>
-                <SimpleLineIcons name="location-pin" size={iconSize} />
+                <SimpleLineIcons
+                  name="location-pin"
+                  size={iconSize}
+                  color={config.colors.PRIMARY}
+                  button
+                  onPress={() =>
+                    this.props.navigation.navigate("OrderMapView", {
+                      name: orderObj.name,
+                      address: orderObj.address,
+                      addressFull: orderObj.address_full,
+                      note: orderObj.note,
+                    })}
+                />
               </Left>
               <Body>
                 <Text bold selectable>

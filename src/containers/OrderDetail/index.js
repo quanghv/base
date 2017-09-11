@@ -88,7 +88,12 @@ class OrderDetail extends AppComponent {
         propsDataStatus: this.props.orderDetailStatus
       };
 
-      view = <OrderDetailContainer {...propsContainer} />;
+      view = (
+        <OrderDetailContainer
+          {...propsContainer}
+          navigation={this.props.navigation}
+        />
+      );
     }
     return view;
   }

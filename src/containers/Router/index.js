@@ -18,6 +18,7 @@ import OrderShipping from "../OrderTabScreen/OrderShipping";
 import OrderDone from "../OrderTabScreen/OrderDone";
 import OrderCancel from "../OrderTabScreen/OrderCancel";
 import OrderDetail from "../OrderDetail";
+import OrderMapView from "../MapView";
 
 const footers = [
   {
@@ -134,7 +135,8 @@ export default StackNavigator(
       }
     },
     DrawerNav: { screen: DrawerNav },
-    OrderDetail: { screen: OrderDetail }
+    OrderDetail: { screen: OrderDetail },
+    OrderMapView: { screen: OrderMapView }
   },
   { headerMode: "none" }
 );
