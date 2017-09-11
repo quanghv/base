@@ -51,7 +51,7 @@ const footers = [
 const renderFooterTab = props => {
   const view = footers.map((item, index) => {
     const activeTab = props.navigationState.index === index;
-    const flex = activeTab ? 3 : 1;
+    const flex = activeTab ? 4 : 1;
     const tabText = !activeTab ? null : (
       <Text numberOfLines={1}>{item.label}</Text>
     );

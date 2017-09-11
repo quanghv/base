@@ -10,7 +10,6 @@
     "androidStatusBarColor": "#351f53",
     "loading": {
       "icon": "./src/images/logo.png",
-      "hideExponentText": true,
       "backgroundColor": "#59348a"
     },
     "ios": {

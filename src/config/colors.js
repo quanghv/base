@@ -1,5 +1,9 @@
 module.exports = {
   PRIMARY: "#59348a",
+  INFO: "#62B1F6",
+  WARNING: "#f0ad4e",
+  SUCCESS: "#5cb85c",
+  DANGER: "#d9534f",
   SELECTION: "#9b59b6",
   PLACEHOLDER: "#999999",
   CANCEL_BACKGROUND: "#ccc",

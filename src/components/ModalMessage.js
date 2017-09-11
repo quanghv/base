@@ -3,6 +3,7 @@ import { Modal, PixelRatio, View } from "react-native";
 import * as Animatable from "react-native-animatable";
 import { Button, Text } from "native-base";
 import { Grid, Row } from "react-native-easy-grid";
+import { Ionicons } from "@expo/vector-icons";
 
 import config from "../config";
 
@@ -33,7 +34,7 @@ export default class ModalMessage extends React.Component {
         style={{
           flexDirection: "row",
           alignSelf: "center",
-          marginTop: 10
+          marginTop: 20
         }}
       >
         {actions.map((value, index) => {
@@ -78,30 +79,59 @@ export default class ModalMessage extends React.Component {
 
   render() {
     let icMessage;
+    const iconSize = 74;
     switch (this.props.icon) {
       case "info":
-        icMessage = config.images.icWarningGray;
+        // icMessage = config.images.icWarningGray;
+        icMessage = (
+          <Ionicons
+            name={"ios-alert-outline"}
+            size={iconSize}
+            color={config.colors.INFO}
+          />
+        );
         break;
       case "warning":
-        icMessage = config.images.icWarning;
+        // icMessage = config.images.icWarning;
+        icMessage = (
+          <Ionicons
+            name={"ios-alert-outline"}
+            size={iconSize}
+            color={config.colors.WARNING}
+          />
+        );
         break;
       case "success":
-        icMessage = config.images.icSuccess;
+        // icMessage = config.images.icSuccess;
+        icMessage = (
+          <Ionicons
+            name={"ios-checkmark-circle-outline"}
+            size={iconSize}
+            color={config.colors.SUCCESS}
+          />
+        );
         break;
       case "error":
-        icMessage = config.images.icError;
+        // icMessage = config.images.icError;
+        icMessage = (
+          <Ionicons
+            name={"ios-close-circle-outline"}
+            size={iconSize}
+            color={config.colors.DANGER}
+          />
+        );
         break;
       default:
         icMessage = null;
     }
-    const iconMessage = icMessage ? (
-      <Animatable.Image
-        animation={"zoomIn"}
-        delay={1}
-        source={icMessage}
-        style={styles.icon}
-      />
-    ) : null;
+    // const iconMessage = icMessage ? (
+    //   <Animatable.Image
+    //     animation={"zoomIn"}
+    //     delay={1}
+    //     source={icMessage}
+    //     style={styles.icon}
+    //   />
+    // ) : null;
 
     let { modalAnimation, viewAnimation, duration } = this.props;
 
@@ -140,9 +170,12 @@ export default class ModalMessage extends React.Component {
                   width: boxWidth
                 }}
               >
-                {iconMessage}
+                <Animatable.View animation={"zoomIn"} duration={800}>
+                  {icMessage}
+                </Animatable.View>
+                {/* {iconMessage} */}
                 <Text style={styles.title}>{this.props.title}</Text>
-                <Text style={{ marginVertical: 20 }}>{this.props.message}</Text>
+                <Text style={{ marginVertical: 10 }}>{this.props.message}</Text>
                 {this.renderButtonAction()}
               </Animatable.View>
             </Row>
