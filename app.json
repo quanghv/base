@@ -16,7 +16,12 @@
       "bundleIdentifier": "vn.mshop.app"
     },
     "android": {
-      "package": "vn.mshop.app"
+      "package": "vn.mshop.app",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyBHB4mBHbrepYAOXTbI68WfA1P2jwX5btg"
+        }
+      }
     },
     "notification": {
       "icon": "./src/images/ic_notification.png",

@@ -46,18 +46,16 @@
   dependencies:
     cross-spawn "^5.1.0"
 
-"@expo/vector-icons@^5.0.0":
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/@expo/vector-icons/-/vector-icons-5.1.0.tgz#bea328a58ee60659bd566978f035d0001cca60b3"
-  dependencies:
-    react-native-vector-icons "4.1.1"
-
-"@expo/vector-icons@^5.2.0":
+"@expo/vector-icons@^5.0.0", "@expo/vector-icons@^5.2.0":
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/@expo/vector-icons/-/vector-icons-5.2.0.tgz#877f75c00bf21313cdb231c92cbcfd40e46ee2a1"
   dependencies:
     lodash "^4.17.4"
     react-native-vector-icons "4.1.1"
+
+"@mapbox/polyline@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@mapbox/polyline/-/polyline-0.2.0.tgz#6e25980744aa22331f94b645a542c02d3fcfee97"
 
 "@segment/loosely-validate-event@^1.1.2":
   version "1.1.2"
