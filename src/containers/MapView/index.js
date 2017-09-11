@@ -81,8 +81,11 @@ export default class OrderMapView extends AppComponent {
       this.logThis(this.state);
       const coordinate = new MapView.AnimatedRegion({
         latitude: this.state.lat,
-        longitude: this.state.long,
-        title: this.state.address
+        longitude: this.state.long
+      });
+      const home = new MapView.AnimatedRegion({
+        latitude: 20.9643519,
+        longitude: 105.7954345
       });
       view = (
         <MapView
@@ -94,6 +97,11 @@ export default class OrderMapView extends AppComponent {
             longitudeDelta: 0.0421
           }}
         >
+          <MapView.Marker.Animated
+            coordinate={home}
+            title={"Nhà riêng"}
+            description={"M-SHOP.VN"}
+          />
           <MapView.Marker.Animated
             coordinate={coordinate}
             title={address}
