@@ -1,7 +1,7 @@
 import React from "react";
 import { Modal, PixelRatio, View } from "react-native";
 import * as Animatable from "react-native-animatable";
-import { Button, Text } from "native-base";
+import { Button, Text, Input, Item } from "native-base";
 import { Grid, Row } from "react-native-easy-grid";
 
 import config from "../config";
@@ -68,9 +68,7 @@ export default class ModalMessage extends React.Component {
               key={index}
               {...propsBtn}
             >
-              <Text {...propsBtnText}>
-                {value.text ? value.text : "OK"}
-              </Text>
+              <Text {...propsBtnText}>{value.text ? value.text : "OK"}</Text>
             </Button>
           );
         })}
@@ -96,14 +94,14 @@ export default class ModalMessage extends React.Component {
       default:
         icMessage = null;
     }
-    const iconMessage = icMessage
-      ? <Animatable.Image
-          animation={"zoomIn"}
-          delay={1}
-          source={icMessage}
-          style={styles.icon}
-        />
-      : null;
+    const iconMessage = icMessage ? (
+      <Animatable.Image
+        animation={"zoomIn"}
+        delay={1}
+        source={icMessage}
+        style={styles.icon}
+      />
+    ) : null;
 
     let { modalAnimation, viewAnimation, duration } = this.props;
 
@@ -142,12 +140,11 @@ export default class ModalMessage extends React.Component {
                 }}
               >
                 {iconMessage}
-                <Text style={styles.title}>
-                  {this.props.title}
-                </Text>
-                <Text style={{ marginVertical: 20 }}>
-                  {this.props.message}
-                </Text>
+                <Text style={styles.title}>{this.props.title}</Text>
+                <Text style={{ marginVertical: 20 }}>{this.props.message}</Text>
+                <Item regular style={{ marginBottom: 5 }}>
+                  <Input placeholder="Input value" />
+                </Item>
                 {this.renderButtonAction()}
               </Animatable.View>
             </Row>

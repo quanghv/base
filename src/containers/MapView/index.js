@@ -1,6 +1,6 @@
 import React from "react";
-import { View, Platform } from "react-native";
-import { MapView, Location, Permissions, Constants } from "expo";
+import { View } from "react-native";
+import { MapView, Location, Permissions } from "expo";
 import axios from "axios";
 import { Container, Spinner, Text, Fab, Button } from "native-base";
 import Polyline from "@mapbox/polyline";
@@ -37,7 +37,8 @@ export default class OrderMapView extends AppComponent {
       firstPoint: [],
       lastPoint: [],
       hasError: false,
-      errorMessage: null
+      errorMessage: null,
+      goBack: false
     };
   }
   componentWillMount() {
@@ -50,7 +51,8 @@ export default class OrderMapView extends AppComponent {
         if (response.data.status === "ZERO_RESULTS") {
           this.setState({
             hasError: true,
-            errorMessage: "Không tìm thấy địa chỉ này trên bản đồ"
+            errorMessage: "Không tìm thấy địa chỉ này trên bản đồ",
+            goBack: false
           });
         } else {
           const location = response.data.results
@@ -138,7 +140,8 @@ export default class OrderMapView extends AppComponent {
     if (status !== "granted") {
       this.setState({
         hasError: true,
-        errorMessage: "Ứng dụng chưa có quyền truy cập Location"
+        errorMessage: "Ứng dụng chưa có quyền truy cập Location",
+        goBack: true
       });
     }
 
@@ -237,7 +240,10 @@ export default class OrderMapView extends AppComponent {
             {
               text: "Đồng ý",
               onPress: () => this.props.navigation.goBack()
-            }
+            },
+            this.state.goBack
+              ? null
+              : { text: "Sửa địa chỉ", onPress: () => {}, type: "danger" }
           ]}
         />
         <AppHeader title={name} subTitle={address} {...this.props} />

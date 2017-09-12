@@ -83,8 +83,9 @@ const renderFooterTab = props => {
         key={index}
         full
         active={activeTab}
-        onPress={() =>
-          activeTab ? null : props.navigation.navigate(item.screen)}
+        onPress={
+          activeTab ? null : () => props.navigation.navigate(item.screen)
+        }
       >
         {icon}
         {tabText}
