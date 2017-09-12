@@ -10,7 +10,8 @@
     "androidStatusBarColor": "#351f53",
     "loading": {
       "icon": "./src/images/logo.png",
-      "backgroundColor": "#59348a"
+      "hideExponentText": true,
+      "backgroundColor": "#351f53"
     },
     "ios": {
       "bundleIdentifier": "vn.mshop.app"

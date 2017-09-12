@@ -1,7 +1,7 @@
 import React from "react";
 import { Modal, PixelRatio, View } from "react-native";
 import * as Animatable from "react-native-animatable";
-import { Button, Text } from "native-base";
+import { Button, Text, Input, Item } from "native-base";
 import { Grid, Row } from "react-native-easy-grid";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -176,6 +176,9 @@ export default class ModalMessage extends React.Component {
                 {/* {iconMessage} */}
                 <Text style={styles.title}>{this.props.title}</Text>
                 <Text style={{ marginVertical: 10 }}>{this.props.message}</Text>
+                <Item regular style={{ marginBottom: 5 }}>
+                  <Input placeholder="Input value" multilineì />
+                </Item>
                 {this.renderButtonAction()}
               </Animatable.View>
             </Row>
