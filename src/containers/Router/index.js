@@ -52,7 +52,7 @@ const footers = [
 const renderFooterTab = props => {
   const view = footers.map((item, index) => {
     const activeTab = props.navigationState.index === index;
-    const flex = activeTab ? 3.5 : 1;
+    const flex = activeTab ? 3 : 1;
     const tabText = !activeTab ? null : (
       <Text numberOfLines={1}>{item.label}</Text>
     );
@@ -127,7 +127,7 @@ const DrawerNav = DrawerNavigator(
   }
 );
 
-export default StackNavigator(
+const MainStack = StackNavigator(
   {
     AuthScreen: {
       screen: AuthScreen,
@@ -141,3 +141,5 @@ export default StackNavigator(
   },
   { headerMode: "none" }
 );
+
+export default MainStack;

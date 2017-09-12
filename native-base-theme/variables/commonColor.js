@@ -8,6 +8,14 @@ const deviceWidth = Dimensions.get("window").width;
 const platform = Platform.OS;
 const platformStyle = undefined;
 
+const hexColor = thisColor => {
+  try {
+    return thisColor.hex();
+  } catch (e) {
+    return thisColor.hexString();
+  }
+};
+
 export default {
   platformStyle,
   platform,
@@ -163,7 +171,7 @@ export default {
   iosStatusbar: "light-content",
   toolbarDefaultBorder: colors.PRIMARY,
   get statusBarColor() {
-    return color(this.toolbarDefaultBg).darken(0.2).hexString();
+    return hexColor(color(this.toolbarDefaultBg).darken(0.2));
   },
 
   // Icon
@@ -230,7 +238,7 @@ export default {
   radioColor: "#7e7e7e",
 
   get radioSelectedColor() {
-    return color(this.radioColor).darken(0.2).hexString();
+    return hexColor(color(this.radioColor).darken(0.2));
   },
 
   // Spinner
@@ -267,7 +275,7 @@ export default {
   },
 
   get darkenHeader() {
-    return color(this.tabBgColor).darken(0.03).hexString();
+    return hexColor(color(this.tabBgColor).darken(0.03));
   },
 
   dropdownBg: "#000",

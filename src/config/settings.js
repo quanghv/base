@@ -1,7 +1,7 @@
 import { Platform } from "react-native";
 
 module.exports = {
-  eviroment: "DEV",
+  eviroment: "PRO",
   timeoutTryAgain: 1000,
-  iconSize: Platform.OS === "ios" ? 24 : 16
+  iconSize: Platform.OS === "ios" ? 24 : 24
 };

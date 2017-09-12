@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, PixelRatio, View } from "react-native";
+import { KeyboardAvoidingView, Modal, PixelRatio, View } from "react-native";
 import * as Animatable from "react-native-animatable";
 import { Button, Text, Input, Item } from "native-base";
 import { Grid, Row } from "react-native-easy-grid";
@@ -12,7 +12,8 @@ const boxWidth =
 
 export default class ModalMessage extends React.Component {
   state = {
-    visible: this.props.visible
+    visible: this.props.visible,
+    inputValue: null
   };
 
   componentWillReceiveProps(nextProps) {
@@ -37,6 +38,18 @@ export default class ModalMessage extends React.Component {
           marginTop: 20
         }}
       >
+        {this.props.editable && (
+          <Button
+            key={"keyX"}
+            style={[styles.button, styles.buttonDanger]}
+            onPress={() => {
+              this.closeThis();
+              this.props.editable.onPress(this.state.inputValue);
+            }}
+          >
+            <Text style={styles.buttonText}>{this.props.editable.text}</Text>
+          </Button>
+        )}
         {actions.map((value, index) => {
           let propsBtn;
           let propsBtnText;
@@ -124,14 +137,6 @@ export default class ModalMessage extends React.Component {
       default:
         icMessage = null;
     }
-    // const iconMessage = icMessage ? (
-    //   <Animatable.Image
-    //     animation={"zoomIn"}
-    //     delay={1}
-    //     source={icMessage}
-    //     style={styles.icon}
-    //   />
-    // ) : null;
 
     let { modalAnimation, viewAnimation, duration } = this.props;
 
@@ -173,13 +178,27 @@ export default class ModalMessage extends React.Component {
                 <Animatable.View animation={"zoomIn"} duration={800}>
                   {icMessage}
                 </Animatable.View>
-                {/* {iconMessage} */}
-                <Text style={styles.title}>{this.props.title}</Text>
-                <Text style={{ marginVertical: 10 }}>{this.props.message}</Text>
-                <Item regular style={{ marginBottom: 5 }}>
-                  <Input placeholder="Input value" multilineì />
-                </Item>
-                {this.renderButtonAction()}
+                <KeyboardAvoidingView behavior="padding">
+                  {/* {iconMessage} */}
+                  <Text style={styles.title}>{this.props.title}</Text>
+                  <Text style={{ marginVertical: 10 }}>
+                    {this.props.message}
+                  </Text>
+
+                  {this.props.editable && (
+                    <Item regular style={{ marginBottom: 5 }}>
+                      <Input
+                        onChangeText={inputValue =>
+                          this.setState({ inputValue })}
+                        style={{ minHeight: 50 }}
+                        value={this.props.editable.inputValue}
+                        placeholder="Input value"
+                        multiline
+                      />
+                    </Item>
+                  )}
+                  {this.renderButtonAction()}
+                </KeyboardAvoidingView>
               </Animatable.View>
             </Row>
             <Row />

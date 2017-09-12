@@ -1,5 +1,5 @@
 const constant = {
-  DEBUG: false
+  DEBUG: true
 };
 
 /**
@@ -10,6 +10,6 @@ const constant = {
  */
 export const consoleLog = (str1, str2) => {
   if (constant.DEBUG) {
-    str2 ? console.log(str1, str2) : console.log(str1);
+    console.log(str1, str2);
   }
 };

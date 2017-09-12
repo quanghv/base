@@ -42,13 +42,18 @@ export default class OrderMapView extends AppComponent {
     };
   }
   componentWillMount() {
-    const googleApi = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURI(
-      this.props.navigation.state.params.addressFull
-    )}&language=vi&key=${apiKey}`;
-    axios
+    this.getLocation(encodeURI(this.props.navigation.state.params.addressFull));
+    // const address = this.props.navigation.params;
+  }
+
+  getLocation = async address => {
+    const googleApi = `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&language=vi&key=${apiKey}`;
+    console.log(googleApi);
+    await axios
       .get(googleApi)
       .then(response => {
         if (response.data.status === "ZERO_RESULTS") {
+          console.log(response);
           this.setState({
             hasError: true,
             errorMessage: "Không tìm thấy địa chỉ này trên bản đồ",
@@ -68,8 +73,7 @@ export default class OrderMapView extends AppComponent {
       .catch(e => {
         this.logThis(e);
       });
-    // const address = this.props.navigation.params;
-  }
+  };
 
   async getDirections(locationStart, marker) {
     const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${locationStart.latitude},${locationStart.longitude}&language=vi&destination=${marker.latitude},${marker.longitude}&key=${apiKey}`;
@@ -120,7 +124,7 @@ export default class OrderMapView extends AppComponent {
           this.logThis(e);
         });
     } catch (error) {
-      return error;
+      this.logThis(error);
     }
   }
 
@@ -175,8 +179,19 @@ export default class OrderMapView extends AppComponent {
     }
   };
 
+  preSearchLocation = location => {
+    this.setState({ hasError: false });
+    // console.log(location, "kiwi");
+    this.getLocation(location);
+  };
+
   render() {
-    const { address, name, note } = this.props.navigation.state.params;
+    const {
+      address,
+      name,
+      note,
+      addressFull
+    } = this.props.navigation.state.params;
     let view;
     if (!this.state.marker.latitude || !this.state.marker.longitude) {
       view = <Spinner />;
@@ -238,13 +253,19 @@ export default class OrderMapView extends AppComponent {
           icon={"error"}
           action={[
             {
-              text: "Đồng ý",
+              text: "Đóng",
               onPress: () => this.props.navigation.goBack()
-            },
-            this.state.goBack
-              ? null
-              : { text: "Sửa địa chỉ", onPress: () => {}, type: "danger" }
+            }
           ]}
+          editable={
+            this.state.goBack ? null : (
+              {
+                text: "Tìm lại",
+                inputValue: addressFull,
+                onPress: this.preSearchLocation
+              }
+            )
+          }
         />
         <AppHeader title={name} subTitle={address} {...this.props} />
         {view}
