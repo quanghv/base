@@ -67,6 +67,9 @@ class AuthScreen extends AppComponent {
   }
 
   registerForPushNotificationsAsync = async accountId => {
+    if (config.settings.eviroment === "DEV") {
+      return;
+    }
     const { existingStatus } = await Permissions.getAsync(
       Permissions.NOTIFICATIONS
     );

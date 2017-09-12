@@ -1,5 +1,5 @@
 import React from "react";
-import { Platform } from "react-native";
+// import { Platform } from "react-native";
 import {
   StackNavigator,
   TabNavigator,
@@ -22,23 +22,23 @@ import OrderMapView from "../MapView";
 
 const footers = [
   {
-    label: "Đơn hàng mới",
+    label: "Đơn mới",
     screen: "OrderConfirm",
     icon: "notifications-active",
     image: null
   },
   {
-    label: "Chuẩn bị hàng",
+    label: "Gói hàng",
     screen: "OrderConfirmShipping",
     icon: "package"
   },
   {
-    label: "Vận chuyển",
+    label: "Giao hàng",
     screen: "OrderShipping",
     icon: "local-shipping"
   },
   {
-    label: "Hoàn thành",
+    label: "Đã xong",
     screen: "OrderDone",
     icon: "playlist-add-check"
   },
@@ -52,7 +52,7 @@ const footers = [
 const renderFooterTab = props => {
   const view = footers.map((item, index) => {
     const activeTab = props.navigationState.index === index;
-    const flex = activeTab ? 3 : 1;
+    const flex = activeTab ? 3.5 : 1;
     const tabText = !activeTab ? null : (
       <Text numberOfLines={1}>{item.label}</Text>
     );
