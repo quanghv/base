@@ -58,10 +58,15 @@ export default class OrderMapView extends AppComponent {
           const points = Polyline.decode(
             resp.data.routes[0].overview_polyline.points
           );
-          const coords = points.map(point => ({
-            latitude: point[0],
-            longitude: point[1]
-          }));
+          const coords = points.map((point, index) => {
+            if (index === points.length()) {
+              this.logThis(index, "last");
+            }
+            return {
+              latitude: point[0],
+              longitude: point[1]
+            };
+          });
           this.setState({ direction: coords });
         })
         .catch(e => {
