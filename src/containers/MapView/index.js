@@ -1,41 +1,30 @@
 import React from "react";
-import { View } from "react-native";
-import { MapView, Location, Permissions } from "expo";
+import { Location, Permissions } from "expo";
 import axios from "axios";
-import { Container, Spinner, Text, Fab, Button } from "native-base";
+import { Container, Spinner } from "native-base";
 import Polyline from "@mapbox/polyline";
-import { Entypo } from "@expo/vector-icons";
 
 import AppComponent from "../../components/AppComponent";
 import AppHeader from "../../components/AppHeader";
 import ModalMessage from "../../components/ModalMessage";
 import config from "../../config";
 
-const apiKey = "AIzaSyBHB4mBHbrepYAOXTbI68WfA1P2jwX5btg";
-const coordinateHome = {
-  latitude: 20.964586,
-  longitude: 105.795023
-};
-const coordinateCompany = {
-  latitude: 21.046806,
-  longitude: 105.76529
-};
+import MapViewContainer from "./container";
 
 export default class OrderMapView extends AppComponent {
   constructor(props) {
     super(props);
 
     this.state = {
-      locationStart: coordinateHome,
+      locationStart: config.mapview.COORDINATE_HOME,
       iconStart: "home",
       titleStart: "Nhà riêng",
-      fabActived: false,
-      marker: {},
+      coordinateEnd: {}, //lat,long diem cuoi
       direction: null,
       distance: null,
       duration: null,
-      firstPoint: [],
-      lastPoint: [],
+      walkFromStart: [], //di bo tu diem dau
+      walkToEnd: [], //di bo tu toi diem cuoi
       hasError: false,
       errorMessage: null,
       goBack: false
@@ -47,26 +36,39 @@ export default class OrderMapView extends AppComponent {
   }
 
   getLocation = async address => {
-    const googleApi = `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&language=vi&key=${apiKey}`;
-    console.log(googleApi);
+    const googleApi = `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&language=vi&key=${config
+      .mapview.KEY.WEB_SERVICE}`;
     await axios
       .get(googleApi)
       .then(response => {
-        if (response.data.status === "ZERO_RESULTS") {
-          console.log(response);
+        let errorMessage = null;
+        switch (response.data.status) {
+          case "ZERO_RESULTS":
+            errorMessage = "Không tìm thấy địa chỉ này trên bản đồ";
+            break;
+          case "REQUEST_DENIED":
+            errorMessage = response.data.error_message;
+            break;
+          default:
+            break;
+        }
+        if (errorMessage !== null) {
           this.setState({
             hasError: true,
-            errorMessage: "Không tìm thấy địa chỉ này trên bản đồ",
+            errorMessage,
             goBack: false
           });
         } else {
           const location = response.data.results
             ? response.data.results[0].geometry.location
             : null;
-          const marker = { longitude: location.lng, latitude: location.lat };
+          const coordinateEnd = {
+            longitude: location.lng,
+            latitude: location.lat
+          };
           if (location) {
-            this.setState({ marker });
-            this.getDirections(coordinateHome, marker);
+            this.setState({ coordinateEnd });
+            this.getDirections(this.state.locationStart, coordinateEnd);
           }
         }
       })
@@ -75,33 +77,32 @@ export default class OrderMapView extends AppComponent {
       });
   };
 
-  async getDirections(locationStart, marker) {
-    const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${locationStart.latitude},${locationStart.longitude}&language=vi&destination=${marker.latitude},${marker.longitude}&key=${apiKey}`;
-    // this.logThis(url, "urlDirection");
+  async getDirections(locationStart, coordinateEnd) {
+    const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${locationStart.latitude},${locationStart.longitude}&language=vi&destination=${coordinateEnd.latitude},${coordinateEnd.longitude}&key=${config
+      .mapview.KEY.WEB_SERVICE}`;
     try {
       await axios
         .get(url)
         .then(resp => {
-          //   this.logThis(resp, "googleDirection");
           const routes = resp.data.routes[0];
           if (routes) {
             const points = Polyline.decode(routes.overview_polyline.points);
 
             if (points.length > 0) {
               const fp = { latitude: points[0][0], longitude: points[0][1] };
-              const firstPoint = [];
-              firstPoint.push(this.state.locationStart);
-              firstPoint.push(fp);
-              this.setState({ firstPoint });
+              const walkFromStart = [];
+              walkFromStart.push(this.state.locationStart);
+              walkFromStart.push(fp);
+              this.setState({ walkFromStart });
               if (points.length > 1) {
-                const lastPoint = [];
+                const walkToEnd = [];
                 const last = {
                   latitude: points[points.length - 1][0],
                   longitude: points[points.length - 1][1]
                 };
-                lastPoint.push(marker);
-                lastPoint.push(last);
-                this.setState({ lastPoint });
+                walkToEnd.push(coordinateEnd);
+                walkToEnd.push(last);
+                this.setState({ walkToEnd });
               }
             }
 
@@ -129,14 +130,7 @@ export default class OrderMapView extends AppComponent {
   }
 
   onCurrentLocation = () => {
-    // if (Platform.OS === "android" && !Constants.isDevice) {
-    //   this.setState({
-    //     errorMessage:
-    //       "Oops, this will not work on Sketch in an Android emulator. Try it on your device!"
-    //   });
-    // } else {
     this._getLocationAsync();
-    // }
   };
 
   _getLocationAsync = async () => {
@@ -155,33 +149,29 @@ export default class OrderMapView extends AppComponent {
         latitude: currentLocation.coords.latitude,
         longitude: currentLocation.coords.longitude
       };
-      this.changeStart(currentCoordinate);
-      //   console.log(currentLocation, "currentLocation");
-      // this.setState({ location });
+      this.changeStartLocation(currentCoordinate);
     }
   };
 
-  changeStart = locationStart => {
+  changeStartLocation = locationStart => {
     if (locationStart !== this.state.locationStart) {
       let iconStart = "home";
       let titleStart = this.state.titleStart;
-      if (locationStart === coordinateCompany) {
+      if (locationStart === config.mapview.COORDINATE_COMPANY) {
         iconStart = "briefcase";
         titleStart = "Go Solutions Jsc";
-      } else if (locationStart !== coordinateHome) {
+      } else if (locationStart !== config.mapview.COORDINATE_HOME) {
         iconStart = "location-pin";
         titleStart = "Địa điểm hiện tại";
       }
-      this.setState(
-        { locationStart, fabActived: false, iconStart, titleStart },
-        () => this.getDirections(locationStart, this.state.marker)
+      this.setState({ locationStart, iconStart, titleStart }, () =>
+        this.getDirections(locationStart, this.state.coordinateEnd)
       );
     }
   };
 
   preSearchLocation = location => {
     this.setState({ hasError: false });
-    // console.log(location, "kiwi");
     this.getLocation(location);
   };
 
@@ -193,56 +183,43 @@ export default class OrderMapView extends AppComponent {
       addressFull
     } = this.props.navigation.state.params;
     let view;
-    if (!this.state.marker.latitude || !this.state.marker.longitude) {
+    if (
+      !this.state.coordinateEnd.latitude ||
+      !this.state.coordinateEnd.longitude
+    ) {
       view = <Spinner />;
     } else {
-      //   this.logThis(this.state);
-      const coordinateMarker = new MapView.AnimatedRegion(this.state.marker);
-      const home = new MapView.AnimatedRegion(this.state.locationStart);
-      view = (
-        <MapView
-          style={{ flex: 1 }}
-          region={{
-            latitude: this.state.locationStart.latitude,
-            longitude: this.state.locationStart.longitude,
-            latitudeDelta: 0.1,
-            longitudeDelta: 0.05
-          }}
-        >
-          <MapView.Marker.Animated
-            coordinate={home}
-            title={this.state.titleStart}
-            pinColor={config.colors.PRIMARY}
-            description={"Điểm giao hàng"}
-          />
-          <MapView.Marker.Animated
-            coordinate={coordinateMarker}
-            title={address}
-            description={note}
-          />
-          {this.state.direction && (
-            <MapView.Polyline
-              coordinates={this.state.direction}
-              strokeWidth={5}
-              strokeColor={config.colors.PRIMARY}
-            />
-          )}
-          {this.state.firstPoint && (
-            <MapView.Polyline
-              coordinates={this.state.firstPoint}
-              strokeWidth={5}
-              strokeColor="rgba(0,0,0,0.1)"
-            />
-          )}
-          {this.state.lastPoint && (
-            <MapView.Polyline
-              coordinates={this.state.lastPoint}
-              strokeWidth={5}
-              strokeColor="rgba(0,0,0,0.1)"
-            />
-          )}
-        </MapView>
-      );
+      //props to mapview
+      const propsMapView = {
+        initRegion: {
+          latitude: this.state.locationStart.latitude,
+          longitude: this.state.locationStart.longitude,
+          latitudeDelta: 0.1,
+          longitudeDelta: 0.05
+        },
+        markerStart: {
+          coordinate: this.state.locationStart,
+          title: this.state.titleStart,
+          desc: "Điểm giao hàng",
+          icon: this.state.iconStart
+        },
+        markerEnd: {
+          coordinate: this.state.coordinateEnd,
+          title: "Điểm nhận hàng",
+          desc: note,
+          icon: "location"
+        },
+        legs: {
+          direction: this.state.direction,
+          distance: this.state.distance,
+          duration: this.state.duration
+        },
+        address,
+        walkFromStart: this.state.walkFromStart,
+        walkToEnd: this.state.walkToEnd,
+        changeStartLocation: this.changeStartLocation
+      };
+      view = <MapViewContainer {...propsMapView} />;
     }
 
     return (
@@ -269,85 +246,6 @@ export default class OrderMapView extends AppComponent {
         />
         <AppHeader title={name} subTitle={address} {...this.props} />
         {view}
-        {this.state.marker.latitude &&
-        this.state.marker.longitude && (
-          <View>
-            <Fab
-              active={this.state.fabActived}
-              direction="up"
-              containerStyle={{
-                bottom: 110
-              }}
-              position="bottomRight"
-              onPress={() =>
-                this.setState({ fabActived: !this.state.fabActived })}
-            >
-              <Entypo name="direction" size={24} color={"white"} />
-              <Button
-                style={{ backgroundColor: config.colors.PRIMARY }}
-                onPress={() => this.changeStart(coordinateHome)}
-              >
-                <Entypo name={"home"} size={18} color={"white"} />
-              </Button>
-              <Button
-                style={{ backgroundColor: "#DD5144" }}
-                onPress={() => this.changeStart(coordinateCompany)}
-              >
-                <Entypo name="briefcase" size={18} color={"white"} />
-              </Button>
-              <Button
-                style={{ backgroundColor: config.colors.PLACEHOLDER }}
-                onPress={this.onCurrentLocation}
-              >
-                <Entypo name="location-pin" size={24} color={"white"} />
-              </Button>
-            </Fab>
-            <View
-              style={{
-                position: "absolute",
-                bottom: 10,
-                left: 5,
-                right: 5,
-                backgroundColor: config.colors.PRIMARY,
-                paddingLeft: 10,
-                paddingVertical: 10,
-                paddingRight: 40
-              }}
-            >
-              <View style={{ flexDirection: "column" }}>
-                <View style={{ flexDirection: "row" }}>
-                  <Entypo name={this.state.iconStart} size={20} color="white" />
-                  <Text style={{ color: "white" }}>
-                    {" "}
-                    {this.state.titleStart}
-                  </Text>
-                </View>
-                <View style={{ marginLeft: 3, marginVertical: 5 }}>
-                  <Entypo name="dots-three-vertical" size={14} color="white" />
-                </View>
-                <View style={{ flexDirection: "row" }}>
-                  <Entypo name="location" size={20} color="white" />
-                  <Text style={{ color: "white" }}> {address}</Text>
-                </View>
-              </View>
-              <View
-                style={{
-                  position: "absolute",
-                  right: 20,
-                  top: 25,
-                  bottom: 5
-                }}
-              >
-                <Text note style={{ color: "white" }}>
-                  {this.state.distance}
-                </Text>
-                <Text note style={{ color: "white" }}>
-                  {this.state.duration}
-                </Text>
-              </View>
-            </View>
-          </View>
-        )}
       </Container>
     );
   }

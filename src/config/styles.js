@@ -97,6 +97,7 @@ export default {
   },
   textError: {
     color: "red",
-    fontSize: 12
+    fontSize: 12,
+    paddingRight: 5
   }
 };

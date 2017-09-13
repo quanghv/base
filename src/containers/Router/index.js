@@ -12,6 +12,7 @@ import config from "../../config";
 import SideBar from "./SideBar";
 
 import AuthScreen from "../AuthScreen";
+import ChangePass from "../Account/ChangePass";
 import OrderConfirm from "../OrderTabScreen/OrderConfirm";
 import OrderConfirmShipping from "../OrderTabScreen/OrderConfirmShipping";
 import OrderShipping from "../OrderTabScreen/OrderShipping";
@@ -19,6 +20,7 @@ import OrderDone from "../OrderTabScreen/OrderDone";
 import OrderCancel from "../OrderTabScreen/OrderCancel";
 import OrderDetail from "../OrderDetail";
 import OrderMapView from "../MapView";
+import Chart from "../Chart";
 
 const footers = [
   {
@@ -129,15 +131,12 @@ const DrawerNav = DrawerNavigator(
 
 const MainStack = StackNavigator(
   {
-    AuthScreen: {
-      screen: AuthScreen,
-      navigationOptions: {
-        header: null
-      }
-    },
+    AuthScreen: { screen: AuthScreen },
+    ChangePass: { screen: ChangePass },
     DrawerNav: { screen: DrawerNav },
     OrderDetail: { screen: OrderDetail },
-    OrderMapView: { screen: OrderMapView }
+    OrderMapView: { screen: OrderMapView },
+    Chart: { screen: Chart }
   },
   { headerMode: "none" }
 );

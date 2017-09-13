@@ -8,31 +8,37 @@ import {
   Content,
   Left,
   Body,
-  Icon,
   Thumbnail
 } from "native-base";
 import { connect } from "react-redux";
+import { SimpleLineIcons } from "@expo/vector-icons";
 
 import { dispatchDataFromApiPost, dispatchParams } from "../../actions";
 import actionTypes from "../../config/actionTypes";
 import storages from "../../config/storages";
 import images from "../../config/images";
 import ModalMessage from "../../components/ModalMessage";
+import config from "../../config";
 
 const routesPub = [
   {
+    label: "Doanh thu",
+    icon: "chart",
+    screen: "Chart"
+  },
+  {
     label: "Tài khoản",
-    icon: "ios-information-circle-outline",
+    icon: "user",
     screen: "Profile"
   },
   {
     label: "Đổi mật khẩu",
-    icon: "ios-lock-outline",
-    screen: "ChangePassword"
+    icon: "lock",
+    screen: "ChangePass"
   },
   {
     label: "Đăng xuất",
-    icon: "ios-log-out-outline",
+    icon: "logout",
     screen: "Logout"
   }
 ];
@@ -116,7 +122,11 @@ class SideBar extends React.Component {
                 onPress={() => this.handleOnPress(data.screen)}
               >
                 <Left>
-                  <Icon primary name={data.icon} />
+                  <SimpleLineIcons
+                    name={data.icon}
+                    size={18}
+                    color={config.colors.PRIMARY}
+                  />
                 </Left>
                 <Body>
                   <Text>{data.label}</Text>

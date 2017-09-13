@@ -7,6 +7,7 @@ import styles from "./styles";
 import message from "./message";
 import metrics from "./metrics";
 import settings from "./settings";
+import mapview from "./mapview";
 
 export default {
   actionTypes,
@@ -17,5 +18,6 @@ export default {
   styles,
   message,
   metrics,
-  settings
+  settings,
+  mapview
 };

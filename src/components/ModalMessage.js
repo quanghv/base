@@ -38,18 +38,6 @@ export default class ModalMessage extends React.Component {
           marginTop: 20
         }}
       >
-        {this.props.editable && (
-          <Button
-            key={"keyX"}
-            style={[styles.button, styles.buttonDanger]}
-            onPress={() => {
-              this.closeThis();
-              this.props.editable.onPress(this.state.inputValue);
-            }}
-          >
-            <Text style={styles.buttonText}>{this.props.editable.text}</Text>
-          </Button>
-        )}
         {actions.map((value, index) => {
           let propsBtn;
           let propsBtnText;
@@ -86,6 +74,18 @@ export default class ModalMessage extends React.Component {
             </Button>
           );
         })}
+        {this.props.editable && (
+          <Button
+            key={"keyX"}
+            style={[styles.button, styles.buttonDanger]}
+            onPress={() => {
+              this.closeThis();
+              this.props.editable.onPress(this.state.inputValue);
+            }}
+          >
+            <Text style={styles.buttonText}>{this.props.editable.text}</Text>
+          </Button>
+        )}
       </View>
     );
   }

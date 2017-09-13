@@ -68,13 +68,5 @@ export const dispatchParams = (data, type) => dispatch => {
 
 export const postToServer = (actionUrl, data) => {
   consoleLog(data, actionUrl);
-  axios
-    .post(actionUrl, data)
-    .then(response => {
-      consoleLog(response, "responsePostToServer");
-      return response;
-    })
-    .catch(error => {
-      consoleLog("networkError", error);
-    });
+  return axios.post(actionUrl, data);
 };

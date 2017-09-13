@@ -3,6 +3,7 @@ const actionTypes = {
   LOGOUT: "SignOut",
   TOKEN_REG: "TokenReg",
   USER_INFO: "UserInfo",
+  CHANGE_PASS: "ChangePass",
   ORDER_CONFIRM: "OrderConfirm",
   ORDER_CONFIRM_SHIPPING: "OrderConfirmShipping",
   ORDER_SHIPPING: "OrderShipping",
@@ -22,7 +23,9 @@ export const getUrlFromType = type => {
     case actionTypes.LOGIN:
       return `${HOST}api-login`;
     case actionTypes.USER_INFO:
-      return `${HOST}api-user-info`;
+      return `${HOST}api-user-info?`;
+    case actionTypes.CHANGE_PASS:
+      return `${HOST}change-pass`;
     case actionTypes.ORDER_CONFIRM:
     case actionTypes.ORDER_CONFIRM_SHIPPING:
     case actionTypes.ORDER_SHIPPING:
