@@ -1,3 +1,39 @@
 Keystore password: 2b0ea41c-94b0-11e7-89a3-0a580a78002d
 Key alias:         QHF1YW5naHYvbS1zaG9wLXZu
 Key password:      2b0ea427-94b0-11e7-89a3-0a580a78002d
+
+Keystore type: JKS
+Keystore provider: SUN
+
+Your keystore contains 1 entry
+
+Alias name: qhf1yw5nahyvbs1zag9wlxzu
+Creation date: Sep 8, 2017
+Entry type: PrivateKeyEntry
+Certificate chain length: 1
+Certificate[1]:
+Owner: CN=vn.mshop.app, OU=, O=, L=, ST=, C=US
+Issuer: CN=vn.mshop.app, OU=, O=, L=, ST=, C=US
+Serial number: 1cab23be
+Valid from: Fri Sep 08 23:10:02 ICT 2017 until: Tue Jan 24 23:10:02 ICT 2045
+Certificate fingerprints:
+         MD5:  B0:8C:E9:54:F5:98:18:91:F0:B8:A2:EB:DB:E9:63:DE
+         SHA1: AC:07:90:B3:60:FD:66:97:09:E8:6A:CC:C0:69:24:44:93:30:57:FF
+         SHA256: 9C:2C:D2:DA:03:EA:90:40:63:81:1D:D2:31:11:52:B6:62:9E:AC:C8:0C:D3:35:4A:7B:EE:B9:A6:B3:3A:DE:30
+         Signature algorithm name: SHA256withRSA
+         Version: 3
+
+Extensions:
+
+#1: ObjectId: 2.5.29.14 Criticality=false
+SubjectKeyIdentifier [
+KeyIdentifier [
+0000: 58 03 7C 22 9C F4 0C 3F   11 D6 8A 60 31 37 A6 B5  X.."...?...`17..
+0010: 81 65 36 6D                                        .e6m
+]
+]
+
+
+
+*******************************************
+*******************************************
