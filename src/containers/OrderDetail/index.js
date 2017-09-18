@@ -4,7 +4,7 @@ import { Linking } from "react-native";
 
 import AppComponent from "../../components/AppComponent";
 import AppHeader from "../../components/AppHeader";
-import actionTypes from "../../config/actionTypes";
+import actionTypes, { getUrlFromType } from "../../config/actionTypes";
 import config from "../../config";
 
 import OrderDetailContainer from "./container";
@@ -12,7 +12,8 @@ import OrderDetailContainer from "./container";
 import {
   dispatchDataFromApiGet,
   dispatchDataFromApiPost,
-  dispatchParams
+  dispatchParams,
+  postToServer
 } from "../../actions";
 
 class OrderDetail extends AppComponent {
@@ -20,9 +21,17 @@ class OrderDetail extends AppComponent {
     super(props);
     //this.logThis(this.props.navigation.state.params);
     this.state = {
+      accountId: this.props.accountInfo[config.storages.ACCOUNT_ID],
       isLoading: true,
-      selected1: this.props.navigation.state.params.status,
-      needToRefresh: false
+      startStatus: this.props.navigation.state.params.status,
+      selected: this.props.navigation.state.params.status,
+      selectedTmp: this.props.navigation.state.params.status,
+      needToRefresh: false,
+      endStatus: null,
+      showMessage: false,
+      message: null,
+      iconMsg: "error",
+      reloadOnStatus: []
     };
   }
 
@@ -31,17 +40,33 @@ class OrderDetail extends AppComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.logThis(nextProps, "OrderDetail");
+    // this.logThis(nextProps, "OrderDetail");
     const propsData = nextProps.orderDetail;
     if (this.screenIsReady(propsData)) {
       this.setState({ isLoading: false });
     }
+
+    if (nextProps.reloadScreen) {
+      this.setState({ reloadOnStatus: nextProps.reloadScreen.reloadOnStatus });
+    }
   }
 
-  componentWillUnmount() {
-    // this.logThis("componentWillUnmount");
-    if (this.props.orderDetailStatus && this.props.orderDetailStatus.status) {
-      this.props.dispatchParams(null, actionTypes.ORDER_DETAIL_STATUS_CHANGE);
+  async componentWillUnmount() {
+    if (
+      this.state.endStatus !== null &&
+      this.state.startStatus !== this.state.endStatus
+    ) {
+      //badge
+      await this.props.dispatchDataFromApiGet(config.actionTypes.ORDER_BADGE, {
+        account_id: this.state.accountId
+      });
+
+      //set reload on Tab Screen
+      const reloadOnStatus = [
+        ...this.state.reloadOnStatus,
+        this.state.endStatus
+      ];
+      this.props.dispatchParams({ reloadOnStatus }, actionTypes.ORDER_RELOAD);
     }
   }
 
@@ -53,23 +78,63 @@ class OrderDetail extends AppComponent {
     }, tryAgain ? config.settings.timeoutTryAgain : 0);
   }
 
-  onChangeStatus = value => {
-    this.logThis("changeStatus");
+  onChangeStatus = async value => {
+    this.setState({ selected: value });
     //send data to server
-    this.props.dispatchDataFromApiPost(actionTypes.ORDER_DETAIL_STATUS_CHANGE, {
+    await postToServer(getUrlFromType(actionTypes.ORDER_DETAIL_STATUS_CHANGE), {
       id: this.props.navigation.state.params.orderId,
       status: value
+    }).then(response => {
+      //this.logThis(response.data, "onChangeStatus");
+      if (response.data) {
+        let selected;
+        let selectedTmp = this.state.selectedTmp;
+        let iconType;
+        if (response.data.status <= 0) {
+          selected = this.state.selectedTmp;
+          iconType = "error";
+        } else {
+          selectedTmp = value;
+          selected = value;
+          iconType = "success";
+        }
+        const endStatus =
+          selected === actionTypes.ORDER_USER_CANCEL
+            ? actionTypes.ORDER_CANCEL
+            : selected;
+        this.setState({
+          selectedTmp,
+          selected,
+          endStatus,
+          showMessage: true,
+          needToRefresh: this.state.startStatus !== selected,
+          message: response.data.data.userMessage,
+          iconMsg: iconType
+        });
+      } else {
+        this.setState({
+          selected: this.state.selectedTmp,
+          showMessage: true,
+          message: config.message.network_error,
+          iconMsg: "error"
+        });
+      }
     });
-    this.setState({ selected1: value, needToRefresh: true });
   };
 
   render() {
+    // this.logThis(this.state, "state");
     const { title, subTitle } = this.props.navigation.state.params;
     const header = (
       <AppHeader
         title={title}
         subTitle={subTitle}
         needToRefresh={this.state.needToRefresh}
+        callbackOnGoBack={
+          this.state.needToRefresh ? (
+            this.props.navigation.state.params.refreshFunc
+          ) : null
+        }
         rightIcons={[
           { name: "call", callback: () => Linking.openURL(`tel:${subTitle}`) }
         ]}
@@ -83,9 +148,13 @@ class OrderDetail extends AppComponent {
       const propsContainer = {
         header,
         propsData,
-        currentStatus: this.state.selected1,
+        currentStatus: this.state.selected,
         onChangeStatus: this.onChangeStatus,
-        propsDataStatus: this.props.orderDetailStatus
+        propsDataStatus: {
+          visible: this.state.showMessage,
+          message: this.state.message,
+          icon: this.state.iconMsg
+        }
       };
 
       view = (
@@ -100,8 +169,9 @@ class OrderDetail extends AppComponent {
 }
 
 const mapStateToProps = state => ({
+  accountInfo: state.accountReducer.data,
   orderDetail: state.orderDetailReducer,
-  orderDetailStatus: state.orderDetailStatusReducer
+  reloadScreen: state.orderReloadReducer
 });
 
 export default connect(mapStateToProps, {

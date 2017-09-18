@@ -22,7 +22,6 @@ export default class OrderScreen extends AppComponent {
   };
   constructor(props) {
     super(props);
-    // console.log(props, "OrderScreen");
     switch (this.props.navigation.state.key) {
       case "OrderConfirm": //cho xac nhan
         this.actionType = config.actionTypes.ORDER_CONFIRM;
@@ -89,38 +88,67 @@ export default class OrderScreen extends AppComponent {
     };
   }
   componentWillMount() {
+    const propsReload = this.props.realoadScreen;
+    if (this.isOnReloadScreen(propsReload)) {
+      this.resetReloadOnScreen(propsReload);
+    }
     this.getData();
   }
 
-  componentWillReceiveProps(nextProps) {
+  async componentWillReceiveProps(nextProps) {
     const propsData = nextProps.orderList;
     if (this.screenIsReady(propsData)) {
       this.setState({ isLoading: false });
     }
-    if (propsData.data) {
-      if (propsData.data.length > 0) {
-        this.setState({
-          limit: propsData.data.length,
-          isLoading: false,
-          data:
-            this.state.page === 1
-              ? propsData.data
-              : [...this.state.data, ...propsData.data]
-        });
+    if (propsData) {
+      if (propsData.data) {
+        if (propsData.data.length > 0) {
+          this.setState({
+            limit: propsData.data.length,
+            isLoading: false,
+            data:
+              this.state.page === 1
+                ? propsData.data
+                : [...this.state.data, ...propsData.data]
+          });
+        }
+      }
+      if (
+        propsData.empty ||
+        (this.state.page > 1 && this.state.limit !== propsData.data.length)
+      ) {
+        this.setState({ endLoadMore: true });
       }
     }
-    if (
-      propsData.empty ||
-      (this.state.page > 1 && this.state.limit !== propsData.data.length)
-    ) {
-      this.setState({ endLoadMore: true });
-    }
 
-    if (nextProps.value) {
-      // Actions.refresh({ value: false });
-      this.handleRefresh();
+    if (nextProps.realoadScreen) {
+      if (this.isOnReloadScreen(nextProps.realoadScreen)) {
+        await this.resetReloadOnScreen(nextProps.realoadScreen);
+        await this.handleRefresh();
+      }
     }
   }
+
+  isOnReloadScreen = reloadProps => {
+    return (
+      reloadProps &&
+      reloadProps.reloadOnStatus.indexOf(getStatusFromType(this.actionType)) >=
+        0
+    );
+  };
+
+  resetReloadOnScreen = reloadProps => {
+    const newReloadOnStatus = [];
+    reloadProps.reloadOnStatus.map(value => {
+      if (value !== getStatusFromType(this.actionType)) {
+        newReloadOnStatus.push(value);
+      }
+    });
+    this.props.dispatchParams(
+      { reloadOnStatus: newReloadOnStatus, reloadBadge: true },
+      config.actionTypes.ORDER_RELOAD
+    );
+  };
 
   getData() {
     if (this.actionType) {

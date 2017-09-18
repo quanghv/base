@@ -1,6 +1,15 @@
 import actionTypes from "../config/actionTypes";
 import { getResponseFromApi } from "../helpers/reducerHelper";
 
+export const orderReloadReducer = (state = null, action) => {
+  switch (action.type) {
+    case actionTypes.ORDER_RELOAD:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
 export const orderBadgeReducer = (state = null, action) => {
   switch (action.type) {
     case actionTypes.ORDER_BADGE:
@@ -58,12 +67,12 @@ export const orderDetailReducer = (state = null, action) => {
       return state;
   }
 };
-export const orderDetailStatusReducer = (state = null, action) => {
-  switch (action.type) {
-    case actionTypes.ORDER_DETAIL_STATUS_CHANGE:
-      if (action.payload === null) return null;
-      return getResponseFromApi(action);
-    default:
-      return state;
-  }
-};
+// export const orderDetailStatusReducer = (state = null, action) => {
+//   switch (action.type) {
+//     case actionTypes.ORDER_DETAIL_STATUS_CHANGE:
+//       if (action.payload === null) return null;
+//       return getResponseFromApi(action);
+//     default:
+//       return state;
+//   }
+// };

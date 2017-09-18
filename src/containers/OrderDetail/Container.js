@@ -86,22 +86,14 @@ export default class OrderDetailContainer extends AppComponent {
       );
     }
 
-    let modalMessage = null;
-    if (propsDataStatus) {
-      // this.logThis(propsDataStatus, "propsDataStatus");
-      const iconMessage = propsDataStatus.status === 1 ? "success" : "error";
-      const userMessage = propsDataStatus.networkError
-        ? config.message.network_error
-        : propsDataStatus.message;
-      modalMessage = (
-        <ModalMessage
-          visible
-          message={userMessage}
-          icon={iconMessage}
-          viewAnimation={"pulse"}
-        />
-      );
-    }
+    const modalMessage = (
+      <ModalMessage
+        visible={propsDataStatus.visible}
+        message={propsDataStatus.message}
+        icon={propsDataStatus.icon}
+        viewAnimation={"pulse"}
+      />
+    );
     const pickerColor =
       Platform.OS === "ios"
         ? null
@@ -144,11 +136,11 @@ export default class OrderDetailContainer extends AppComponent {
               />
               <Item
                 label="TRẢ HÀNG/HOÀN TIỀN"
-                value={getStatusFromType(actionTypes.ORDER_CANCEL)}
+                value={getStatusFromType(actionTypes.ORDER_USER_CANCEL)}
               />
               <Item
                 label="ĐÃ HỦY"
-                value={getStatusFromType(actionTypes.ORDER_USER_CANCEL)}
+                value={getStatusFromType(actionTypes.ORDER_CANCEL)}
               />
             </Picker>
           </Card>
@@ -206,7 +198,7 @@ export default class OrderDetailContainer extends AppComponent {
                       name: orderObj.name,
                       address: orderObj.address,
                       addressFull: orderObj.address_full,
-                      note: orderObj.note,
+                      note: orderObj.note
                     })}
                 />
               </Left>

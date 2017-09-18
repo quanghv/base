@@ -5,10 +5,6 @@ import {
   TabNavigator,
   DrawerNavigator
 } from "react-navigation";
-import { MaterialIcons, Octicons } from "@expo/vector-icons";
-import { Footer, FooterTab, Button, Badge, Text } from "native-base";
-
-import config from "../../config";
 import SideBar from "./SideBar";
 import TabBarComponent from "./TabBarComponent";
 
@@ -38,29 +34,29 @@ const TabNav = TabNavigator(
   }
 );
 
-// const TabNavStack = StackNavigator({
-//   TabNav: { screen: TabNav }
-// });
+const TabNavStack = StackNavigator({
+  TabNav: { screen: TabNav }
+});
 
-// const DrawerNav = DrawerNavigator(
-//   {
-//     TabNavStack: { screen: TabNavStack }
-//   },
-//   {
-//     contentComponent: props => <SideBar {...props} />
-//   }
-// );
+const DrawerNav = DrawerNavigator(
+  {
+    TabNavStack: { screen: TabNavStack }
+  },
+  {
+    contentComponent: props => <SideBar {...props} />
+  }
+);
 
 const MainStack = StackNavigator(
   {
     AuthScreen: { screen: AuthScreen },
     ChangePass: { screen: ChangePass },
-    DrawerNav: { screen: TabNav },
+    DrawerNav: { screen: DrawerNav },
     OrderDetail: { screen: OrderDetail },
     OrderMapView: { screen: OrderMapView },
     Chart: { screen: Chart }
   },
-  { headerMode: "none" }
+  { headerMode: "none", mode: "card" }
 );
 
 export default MainStack;

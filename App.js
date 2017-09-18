@@ -10,7 +10,7 @@ import theme from "./native-base-theme/variables/commonColor";
 
 import config from "./src/config";
 import allReducers from "./src/reducers";
-import Main from "./src";
+import MainStack from "./src/containers/Router";
 
 const store = createStore(allReducers, applyMiddleware(thunk));
 
@@ -59,7 +59,7 @@ export default class App extends React.Component {
       <Provider store={store}>
         <StyleProvider style={getTheme(theme)}>
           <Root>
-            <Main
+            <MainStack
               ref={nav => {
                 this.navigator = nav;
               }}

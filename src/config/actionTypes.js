@@ -4,6 +4,7 @@ const actionTypes = {
   TOKEN_REG: "TokenReg",
   USER_INFO: "UserInfo",
   CHANGE_PASS: "ChangePass",
+  ORDER_RELOAD: "OrderReload", //tab reload
   ORDER_BADGE: "OrderBadge",
   ORDER_CONFIRM: "OrderConfirm",
   ORDER_CONFIRM_SHIPPING: "OrderConfirmShipping",
@@ -60,6 +61,25 @@ export const getStatusFromType = type => {
       return "1";
     default:
       return "1";
+  }
+};
+
+export const getTypeFromStatus = status => {
+  switch (status) {
+    case "-1":
+      return actionTypes.ORDER_CONFIRM;
+    case "-11":
+      return actionTypes.ORDER_CONFIRM_SHIPPING;
+    case "0":
+      return actionTypes.ORDER_SHIPPING;
+    case "-12":
+      return actionTypes.ORDER_USER_CANCEL;
+    case "-2":
+      return actionTypes.ORDER_CANCEL;
+    case "1":
+      return actionTypes.ORDER_DONE;
+    default:
+      return null;
   }
 };
 

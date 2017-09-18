@@ -46,21 +46,14 @@ class ChangePass extends AppComponent {
         getUrlFromType(config.actionTypes.CHANGE_PASS),
         data
       ).then(response => {
-        this.logThis(response, "postToServer");
+        // this.logThis(response, "postToServer");
         if (response.data) {
-          if (response.data.status < 0) {
-            this.setState({
-              showMessage: true,
-              message: response.data.data.userMessage,
-              iconMsg: "error"
-            });
-          } else {
-            this.setState({
-              showMessage: true,
-              message: response.data.data.userMessage,
-              iconMsg: "error"
-            });
-          }
+          const iconType = response.data.status <= 0 ? "error" : "success";
+          this.setState({
+            showMessage: true,
+            message: response.data.data.userMessage,
+            iconMsg: iconType
+          });
         } else {
           this.setState({
             showMessage: true,

@@ -156,7 +156,7 @@ class AuthScreen extends AppComponent {
   }
 
   setLoggedData = account => {
-    this.logThis(account);
+    // this.logThis(account);
     const multiSets = [
       [config.storages.ACCOUNT_ID, account.id.toString()],
       [
