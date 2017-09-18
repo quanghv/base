@@ -3,6 +3,7 @@ import { reducer as formReducer } from "redux-form";
 
 import { accountReducer } from "./accountReducer";
 import {
+  orderBadgeReducer,
   orderConfirmReducer,
   orderConfirmShippingReducer,
   orderShippingReducer,
@@ -13,6 +14,7 @@ import {
 } from "./orderReducer";
 
 const allReducers = combineReducers({
+  orderBadgeReducer,
   form: formReducer,
   accountReducer,
   orderConfirmReducer,

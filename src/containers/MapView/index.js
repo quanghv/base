@@ -230,7 +230,8 @@ export default class OrderMapView extends AppComponent {
           icon={"error"}
           action={[
             {
-              text: "Đóng",
+              text: "Quay lại",
+              type: "cancel",
               onPress: () => this.props.navigation.goBack()
             }
           ]}

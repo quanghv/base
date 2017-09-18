@@ -1,6 +1,4 @@
-const constant = {
-  DEBUG: true
-};
+import settings from "../config/settings";
 
 /**
  * custom console log
@@ -9,7 +7,7 @@ const constant = {
  * @memberof AppComponent
  */
 export const consoleLog = (str1, str2) => {
-  if (constant.DEBUG) {
+  if (settings.isDebug) {
     console.log(str1, str2);
   }
 };

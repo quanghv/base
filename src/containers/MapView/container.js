@@ -67,7 +67,7 @@ export default class MapViewContainer extends AppComponent {
           active={this.state.fabActived}
           direction="up"
           containerStyle={{
-            bottom: 110
+            bottom: 130
           }}
           position="bottomRight"
           onPress={() => this.setState({ fabActived: !this.state.fabActived })}
@@ -101,20 +101,23 @@ export default class MapViewContainer extends AppComponent {
             backgroundColor: config.colors.PRIMARY,
             paddingLeft: 10,
             paddingVertical: 10,
-            paddingRight: 40
+            paddingRight: 100
           }}
         >
           <View style={{ flexDirection: "column" }}>
             <View style={{ flexDirection: "row" }}>
               <Entypo name={markerStart.icon} size={20} color="white" />
-              <Text style={{ color: "white" }}> {markerStart.title}</Text>
+              <Text style={{ color: "white", marginRight: 15 }}>
+                {" "}
+                {markerStart.title}
+              </Text>
             </View>
             <View style={{ marginLeft: 3, marginVertical: 5 }}>
               <Entypo name="dots-three-vertical" size={14} color="white" />
             </View>
             <View style={{ flexDirection: "row" }}>
               <Entypo name={markerEnd.icon} size={20} color="white" />
-              <Text style={{ color: "white" }}> {address}</Text>
+              <Text style={{ color: "white", marginRight: 15 }}>{address}</Text>
             </View>
           </View>
           <View

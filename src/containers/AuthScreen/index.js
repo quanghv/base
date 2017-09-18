@@ -23,14 +23,21 @@ import FieldInput from "../../components/FieldInput";
 import ModalMessage from "../../components/ModalMessage";
 
 class AuthScreen extends AppComponent {
-  state = { isLoading: true, isSubmitPressed: false, hasError: false };
+  state = {
+    isLoading: true,
+    isSubmitPressed: false,
+    hasError: false,
+    accountId: null
+  };
 
   handleBackPress = () => {
     BackHandler.exitApp();
   };
 
   goToMainPage = async accountId => {
+    //reg pushNotification token
     await this.registerForPushNotificationsAsync(accountId);
+
     const resetAction = NavigationActions.reset({
       index: 0,
       actions: [
@@ -39,7 +46,15 @@ class AuthScreen extends AppComponent {
         })
       ]
     });
+
     this.props.navigation.dispatch(resetAction); //no callback LoginScreen
+  };
+
+  getOrderBadge = async accountId => {
+    this.setState({ isTested: true });
+    await this.props.dispatchDataFromApiGet(config.actionTypes.ORDER_BADGE, {
+      account_id: accountId
+    });
   };
 
   async componentWillMount() {
@@ -119,15 +134,22 @@ class AuthScreen extends AppComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.logThis(nextProps, "props");
-    if (nextProps.accountInfo) {
+    // this.logThis(nextProps, "props");
+
+    if (nextProps.orderBadge) {
+      // this.logThis(nextProps, "propsBadge");
+      this.goToMainPage(this.state.accountId);
+    } else if (nextProps.accountInfo) {
       if (nextProps.accountInfo.data) {
-        this.setState({ isLoading: true });
         //login successfull
         this.setLoggedData(nextProps.accountInfo.data);
         const accountId =
           nextProps.accountInfo.data[config.storages.ACCOUNT_ID];
-        this.goToMainPage(accountId);
+
+        this.setState({ isLoading: true, accountId });
+
+        this.getOrderBadge(accountId);
+        // this.goToMainPage(accountId);
       } else if (this.state.hadSession) this.getLoggedData();
       else this.setState({ isLoading: false });
     }
@@ -267,9 +289,10 @@ class AuthScreen extends AppComponent {
   }
 }
 
-const mapStateToProps = state => {
-  return { accountInfo: state.accountReducer };
-};
+const mapStateToProps = state => ({
+  accountInfo: state.accountReducer,
+  orderBadge: state.orderBadgeReducer
+});
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(

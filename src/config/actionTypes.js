@@ -4,6 +4,7 @@ const actionTypes = {
   TOKEN_REG: "TokenReg",
   USER_INFO: "UserInfo",
   CHANGE_PASS: "ChangePass",
+  ORDER_BADGE: "OrderBadge",
   ORDER_CONFIRM: "OrderConfirm",
   ORDER_CONFIRM_SHIPPING: "OrderConfirmShipping",
   ORDER_SHIPPING: "OrderShipping",
@@ -22,6 +23,8 @@ export const getUrlFromType = type => {
       return `${HOST}api-token-reg`;
     case actionTypes.LOGIN:
       return `${HOST}api-login`;
+    case actionTypes.ORDER_BADGE:
+      return `${HOST}api-order-badge?`;
     case actionTypes.USER_INFO:
       return `${HOST}api-user-info?`;
     case actionTypes.CHANGE_PASS:

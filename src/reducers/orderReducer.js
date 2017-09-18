@@ -1,6 +1,15 @@
 import actionTypes from "../config/actionTypes";
 import { getResponseFromApi } from "../helpers/reducerHelper";
 
+export const orderBadgeReducer = (state = null, action) => {
+  switch (action.type) {
+    case actionTypes.ORDER_BADGE:
+      return getResponseFromApi(action);
+    default:
+      return state;
+  }
+};
+
 export const orderConfirmReducer = (state = null, action) => {
   switch (action.type) {
     case actionTypes.ORDER_CONFIRM:

@@ -6,10 +6,11 @@ import {
   DrawerNavigator
 } from "react-navigation";
 import { MaterialIcons, Octicons } from "@expo/vector-icons";
-import { Footer, FooterTab, Button, Text } from "native-base";
+import { Footer, FooterTab, Button, Badge, Text } from "native-base";
 
 import config from "../../config";
 import SideBar from "./SideBar";
+import TabBarComponent from "./TabBarComponent";
 
 import AuthScreen from "../AuthScreen";
 import ChangePass from "../Account/ChangePass";
@@ -22,85 +23,6 @@ import OrderDetail from "../OrderDetail";
 import OrderMapView from "../MapView";
 import Chart from "../Chart";
 
-const footers = [
-  {
-    label: "Đơn mới",
-    screen: "OrderConfirm",
-    icon: "notifications-active",
-    image: null
-  },
-  {
-    label: "Gói hàng",
-    screen: "OrderConfirmShipping",
-    icon: "package"
-  },
-  {
-    label: "Giao hàng",
-    screen: "OrderShipping",
-    icon: "local-shipping"
-  },
-  {
-    label: "Đã xong",
-    screen: "OrderDone",
-    icon: "playlist-add-check"
-  },
-  {
-    label: "Đã hủy",
-    screen: "OrderCancel",
-    icon: "delete-sweep"
-  }
-];
-
-const renderFooterTab = props => {
-  const view = footers.map((item, index) => {
-    const activeTab = props.navigationState.index === index;
-    const flex = activeTab ? 3 : 1;
-    const tabText = !activeTab ? null : (
-      <Text numberOfLines={1}>{item.label}</Text>
-    );
-    const color = activeTab ? "white" : "#7857a6";
-    let icon;
-    if (item.icon === "package") {
-      icon = (
-        <Octicons
-          name={item.icon}
-          size={config.settings.iconSize}
-          color={color}
-          style={{ marginBottom: 5 }}
-        />
-      );
-    } else {
-      icon = (
-        <MaterialIcons
-          name={item.icon}
-          size={config.settings.iconSize}
-          color={color}
-          style={{ marginBottom: 5 }}
-        />
-      );
-    }
-    return (
-      <Button
-        style={{ flex }}
-        key={index}
-        full
-        active={activeTab}
-        onPress={
-          activeTab ? null : () => props.navigation.navigate(item.screen)
-        }
-      >
-        {icon}
-        {tabText}
-      </Button>
-    );
-  });
-  return (
-    <Footer>
-      <FooterTab>{view}</FooterTab>
-    </Footer>
-  );
-};
-
 const TabNav = TabNavigator(
   {
     OrderConfirm: { screen: OrderConfirm },
@@ -112,28 +34,28 @@ const TabNav = TabNavigator(
   {
     tabBarPosition: "bottom",
     lazy: true,
-    tabBarComponent: props => renderFooterTab(props)
+    tabBarComponent: TabBarComponent
   }
 );
 
-const TabNavStack = StackNavigator({
-  TabNav: { screen: TabNav }
-});
+// const TabNavStack = StackNavigator({
+//   TabNav: { screen: TabNav }
+// });
 
-const DrawerNav = DrawerNavigator(
-  {
-    TabNavStack: { screen: TabNavStack }
-  },
-  {
-    contentComponent: props => <SideBar {...props} />
-  }
-);
+// const DrawerNav = DrawerNavigator(
+//   {
+//     TabNavStack: { screen: TabNavStack }
+//   },
+//   {
+//     contentComponent: props => <SideBar {...props} />
+//   }
+// );
 
 const MainStack = StackNavigator(
   {
     AuthScreen: { screen: AuthScreen },
     ChangePass: { screen: ChangePass },
-    DrawerNav: { screen: DrawerNav },
+    DrawerNav: { screen: TabNav },
     OrderDetail: { screen: OrderDetail },
     OrderMapView: { screen: OrderMapView },
     Chart: { screen: Chart }

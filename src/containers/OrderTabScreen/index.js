@@ -22,6 +22,7 @@ export default class OrderScreen extends AppComponent {
   };
   constructor(props) {
     super(props);
+    // console.log(props, "OrderScreen");
     switch (this.props.navigation.state.key) {
       case "OrderConfirm": //cho xac nhan
         this.actionType = config.actionTypes.ORDER_CONFIRM;

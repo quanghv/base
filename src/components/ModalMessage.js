@@ -1,7 +1,13 @@
 import React from "react";
-import { KeyboardAvoidingView, Modal, PixelRatio, View } from "react-native";
+import {
+  KeyboardAvoidingView,
+  Modal,
+  PixelRatio,
+  ScrollView,
+  View
+} from "react-native";
 import * as Animatable from "react-native-animatable";
-import { Button, Text, Input, Item } from "native-base";
+import {Button, Text, Input, Item } from "native-base";
 import { Grid, Row } from "react-native-easy-grid";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -13,7 +19,8 @@ const boxWidth =
 export default class ModalMessage extends React.Component {
   state = {
     visible: this.props.visible,
-    inputValue: null
+    inputHeight: 32,
+    inputValue: this.props.editable ? this.props.editable.inputValue : null
   };
 
   componentWillReceiveProps(nextProps) {
@@ -143,7 +150,6 @@ export default class ModalMessage extends React.Component {
     modalAnimation = modalAnimation !== null ? modalAnimation : "fade";
     viewAnimation = viewAnimation !== null ? viewAnimation : "bounce";
     duration = duration !== null ? duration : 800;
-
     return (
       <Modal
         animationType={modalAnimation}
@@ -152,8 +158,13 @@ export default class ModalMessage extends React.Component {
         visible={this.state.visible}
         onRequestClose={() => {}}
       >
-        <View style={{ flex: 1, backgroundColor: "rgba(0, 0, 0, 0.6)" }}>
-          <Grid style={[config.styles.grid.center]}>
+        <ScrollView
+          style={{
+            height: config.metrics.DEVICE_HEIGHT,
+            backgroundColor: "rgba(0, 0, 0, 0.6)"
+          }}
+        >
+          <Grid style={[{ flex: 1 }, config.styles.grid.center]}>
             <Row />
             <Row>
               <Animatable.View
@@ -172,7 +183,8 @@ export default class ModalMessage extends React.Component {
                   borderWidth: 1 / PixelRatio.getPixelSizeForLayoutSize(1),
                   paddingVertical: 10,
                   paddingHorizontal: 15,
-                  width: boxWidth
+                  width: boxWidth,
+                  marginTop: "30%"
                 }}
               >
                 <Animatable.View animation={"zoomIn"} duration={800}>
@@ -190,10 +202,15 @@ export default class ModalMessage extends React.Component {
                       <Input
                         onChangeText={inputValue =>
                           this.setState({ inputValue })}
-                        style={{ minHeight: 50 }}
-                        value={this.props.editable.inputValue}
+                        value={this.state.inputValue}
                         placeholder="Input value"
                         multiline
+                        style={{ height: this.state.inputHeight }}
+                        onContentSizeChange={event => {
+                          this.setState({
+                            inputHeight: event.nativeEvent.contentSize.height
+                          });
+                        }}
                       />
                     </Item>
                   )}
@@ -203,7 +220,7 @@ export default class ModalMessage extends React.Component {
             </Row>
             <Row />
           </Grid>
-        </View>
+        </ScrollView>
       </Modal>
     );
   }
