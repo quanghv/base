@@ -150,15 +150,23 @@ export default class OrderScreen extends AppComponent {
     );
   };
 
-  getData() {
+  async getData() {
+    this.getOrderBadge();
     if (this.actionType) {
       const data = {
         page: this.state.page,
         status: getStatusFromType(this.actionType)
       };
-      this.props.dispatchDataFromApiGet(this.actionType, data);
+      await this.props.dispatchDataFromApiGet(this.actionType, data);
     }
   }
+
+  getOrderBadge = async accountId => {
+    this.setState({ isTested: true });
+    await this.props.dispatchDataFromApiGet(config.actionTypes.ORDER_BADGE, {
+      account_id: 1
+    });
+  };
 
   handleRefresh = () => {
     this.setState(

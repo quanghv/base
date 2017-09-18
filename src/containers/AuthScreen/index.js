@@ -50,12 +50,12 @@ class AuthScreen extends AppComponent {
     this.props.navigation.dispatch(resetAction); //no callback LoginScreen
   };
 
-  getOrderBadge = async accountId => {
-    this.setState({ isTested: true });
-    await this.props.dispatchDataFromApiGet(config.actionTypes.ORDER_BADGE, {
-      account_id: accountId
-    });
-  };
+  // getOrderBadge = async accountId => {
+  //   this.setState({ isTested: true });
+  //   await this.props.dispatchDataFromApiGet(config.actionTypes.ORDER_BADGE, {
+  //     account_id: accountId
+  //   });
+  // };
 
   async componentWillMount() {
     //no goBack from loginScreen
@@ -134,12 +134,13 @@ class AuthScreen extends AppComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    // this.logThis(nextProps, "props");
+    this.logThis(nextProps, "props");
 
-    if (nextProps.orderBadge) {
+    // if (nextProps.orderBadge) {
       // this.logThis(nextProps, "propsBadge");
-      this.goToMainPage(this.state.accountId);
-    } else if (nextProps.accountInfo) {
+      // this.goToMainPage(this.state.accountId);
+    // } else 
+    if (nextProps.accountInfo) {
       if (nextProps.accountInfo.data) {
         //login successfull
         this.setLoggedData(nextProps.accountInfo.data);
@@ -147,9 +148,9 @@ class AuthScreen extends AppComponent {
           nextProps.accountInfo.data[config.storages.ACCOUNT_ID];
 
         this.setState({ isLoading: true, accountId });
-
-        this.getOrderBadge(accountId);
-        // this.goToMainPage(accountId);
+        console.log("here?");
+        // this.getOrderBadge(accountId);
+        this.goToMainPage(accountId);
       } else if (this.state.hadSession) this.getLoggedData();
       else this.setState({ isLoading: false });
     }
@@ -290,8 +291,7 @@ class AuthScreen extends AppComponent {
 }
 
 const mapStateToProps = state => ({
-  accountInfo: state.accountReducer,
-  orderBadge: state.orderBadgeReducer
+  accountInfo: state.accountReducer
 });
 
 const mapDispatchToProps = dispatch =>
