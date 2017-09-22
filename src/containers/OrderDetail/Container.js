@@ -45,7 +45,7 @@ export default class OrderDetailContainer extends AppComponent {
     switch (status) {
       case getStatusFromType(actionTypes.ORDER_CONFIRM):
         return config.colors.status.CONFIRM;
-      case getStatusFromType(actionTypes.ORDER_CONFIRM_SHIPPING):
+      case getStatusFromType(actionTypes.ORDER_PACKING):
         return config.colors.status.CONFIRM_SHIPPING;
       case getStatusFromType(actionTypes.ORDER_USER_CANCEL):
         return config.colors.status.CANCEL_USER;
@@ -112,34 +112,35 @@ export default class OrderDetailContainer extends AppComponent {
             </CardItem>
             <Picker
               supportedOrientations={["portrait", "landscape"]}
-              iosHeader="Select one"
+              iosHeader="Chọn trạng thái"
+              headerBackButtonText="Quay lại"
               mode="dropdown"
               onValueChange={value => onChangeStatus(value)}
               selectedValue={currentStatus}
               style={pickerColor}
             >
               <Item
-                label="CHỜ XÁC NHẬN"
+                label={config.strings.order.confirmStatusLabel.toUpperCase()}
                 value={getStatusFromType(actionTypes.ORDER_CONFIRM)}
               />
               <Item
-                label="CHỜ GIAO HÀNG"
-                value={getStatusFromType(actionTypes.ORDER_CONFIRM_SHIPPING)}
+                label={config.strings.order.packingStatusLabel.toUpperCase()}
+                value={getStatusFromType(actionTypes.ORDER_PACKING)}
               />
               <Item
-                label="ĐANG GIAO HÀNG"
+                label={config.strings.order.shippingStatusLabel.toUpperCase()}
                 value={getStatusFromType(actionTypes.ORDER_SHIPPING)}
               />
               <Item
-                label="HOÀN THÀNH"
+                label={config.strings.order.doneStatusLabel.toUpperCase()}
                 value={getStatusFromType(actionTypes.ORDER_DONE)}
               />
               <Item
-                label="TRẢ HÀNG/HOÀN TIỀN"
+                label={config.strings.order.userCancelStatusLabel.toUpperCase()}
                 value={getStatusFromType(actionTypes.ORDER_USER_CANCEL)}
               />
               <Item
-                label="ĐÃ HỦY"
+                label={config.strings.order.shopCancelStatusLabel.toUpperCase()}
                 value={getStatusFromType(actionTypes.ORDER_CANCEL)}
               />
             </Picker>

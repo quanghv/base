@@ -8,61 +8,39 @@ import actionTypes, { getStatusFromType } from "../../config/actionTypes";
 
 const footers = [
   {
-    label: "Đơn mới",
-    screen: "OrderConfirm",
+    label: config.strings.order.confirmLabel,
+    screen: config.settings.tabBarComponent.confirm,
     icon: "notifications-active",
     image: null,
     status: getStatusFromType(actionTypes.ORDER_CONFIRM)
   },
   {
-    label: "Gói hàng",
-    screen: "OrderConfirmShipping",
+    label: config.strings.order.packingLabel,
+    screen: config.settings.tabBarComponent.packing,
     icon: "package",
-    status: getStatusFromType(actionTypes.ORDER_CONFIRM_SHIPPING)
+    status: getStatusFromType(actionTypes.ORDER_PACKING)
   },
   {
-    label: "Giao hàng",
-    screen: "OrderShipping",
+    label: config.strings.order.shippingLabel,
+    screen: config.settings.tabBarComponent.shipping,
     icon: "local-shipping",
     status: getStatusFromType(actionTypes.ORDER_SHIPPING)
   },
   {
-    label: "Đã xong",
-    screen: "OrderDone",
+    label: config.strings.order.doneLabel,
+    screen: config.settings.tabBarComponent.done,
     status: getStatusFromType(actionTypes.ORDER_DONE),
     icon: "playlist-add-check"
   },
   {
-    label: "Đã hủy",
-    screen: "OrderCancel",
+    label: config.strings.order.cancelLabel,
+    screen: config.settings.tabBarComponent.cancel,
     status: getStatusFromType(actionTypes.ORDER_CANCEL),
     icon: "delete-sweep"
   }
 ];
 
 class TabBarComponent extends React.Component {
-  // onPressed = item => {
-  //   // console.log(this.props.reloadScreen, "TabBarComponent");
-  //   const propsScreen = this.props.reloadScreen;
-  //   let params = null;
-  //   if (propsScreen && propsScreen.reloadOnStatus) {
-  //     params =
-  //       propsScreen.reloadOnStatus.indexOf(item.status) !== -1
-  //         ? { needToReload: true }
-  //         : null;
-  //     if (item.status === getStatusFromType(actionTypes.ORDER_CANCEL)) {
-  //       params =
-  //         propsScreen.reloadOnStatus.indexOf(
-  //           getStatusFromType(actionTypes.ORDER_USER_CANCEL)
-  //         ) !== -1
-  //           ? { needToReload: true }
-  //           : params;
-  //     }
-  //   }
-
-  //   this.props.navigation.navigate(item.screen, params);
-  // };
-
   render() {
     let badge;
     const badgeObj = this.props.orderBadge ? this.props.orderBadge.data : null;

@@ -29,7 +29,7 @@ export const orderConfirmReducer = (state = null, action) => {
 };
 export const orderConfirmShippingReducer = (state = null, action) => {
   switch (action.type) {
-    case actionTypes.ORDER_CONFIRM_SHIPPING:
+    case actionTypes.ORDER_PACKING:
       return getResponseFromApi(action);
     default:
       return state;

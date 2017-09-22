@@ -11,18 +11,19 @@ import TabBarComponent from "./TabBarComponent";
 import AuthScreen from "../AuthScreen";
 import ChangePass from "../Account/ChangePass";
 import OrderConfirm from "../OrderTabScreen/OrderConfirm";
-import OrderConfirmShipping from "../OrderTabScreen/OrderConfirmShipping";
+import OrderPacking from "../OrderTabScreen/OrderPacking";
 import OrderShipping from "../OrderTabScreen/OrderShipping";
 import OrderDone from "../OrderTabScreen/OrderDone";
 import OrderCancel from "../OrderTabScreen/OrderCancel";
 import OrderDetail from "../OrderDetail";
 import OrderMapView from "../MapView";
 import Chart from "../Chart";
+import OrderAdd from "../OrderAdd";
 
 const TabNav = TabNavigator(
   {
     OrderConfirm: { screen: OrderConfirm },
-    OrderConfirmShipping: { screen: OrderConfirmShipping },
+    OrderPacking: { screen: OrderPacking },
     OrderShipping: { screen: OrderShipping },
     OrderDone: { screen: OrderDone },
     OrderCancel: { screen: OrderCancel }
@@ -54,7 +55,8 @@ const MainStack = StackNavigator(
     DrawerNav: { screen: DrawerNav },
     OrderDetail: { screen: OrderDetail },
     OrderMapView: { screen: OrderMapView },
-    Chart: { screen: Chart }
+    Chart: { screen: Chart },
+    OrderAdd: { screen: OrderAdd }
   },
   { headerMode: "none", mode: "card" }
 );

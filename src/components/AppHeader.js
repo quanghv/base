@@ -8,19 +8,6 @@ export default class AppHeader extends React.Component {
   state = {
     date: Moment().format("YYYY-MM-DD")
   };
-  componentWillReceiveProps(nextProps) {
-    if (
-      (nextProps.dateXinNghi && nextProps.dateXinNghi.date) ||
-      (nextProps.nhanXetNgayDateReducer &&
-        nextProps.nhanXetNgayDateReducer.date)
-    ) {
-      this.setState({
-        date: nextProps.dateXinNghi
-          ? nextProps.dateXinNghi.date
-          : nextProps.nhanXetNgayDateReducer.date
-      });
-    }
-  }
 
   goBack = () => {
     let action = () => this.props.navigation.goBack();

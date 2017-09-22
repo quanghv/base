@@ -148,7 +148,7 @@ class AuthScreen extends AppComponent {
           nextProps.accountInfo.data[config.storages.ACCOUNT_ID];
 
         this.setState({ isLoading: true, accountId });
-        console.log("here?");
+        // console.log("here?");
         // this.getOrderBadge(accountId);
         this.goToMainPage(accountId);
       } else if (this.state.hadSession) this.getLoggedData();

@@ -7,7 +7,7 @@ const actionTypes = {
   ORDER_RELOAD: "OrderReload", //tab reload
   ORDER_BADGE: "OrderBadge",
   ORDER_CONFIRM: "OrderConfirm",
-  ORDER_CONFIRM_SHIPPING: "OrderConfirmShipping",
+  ORDER_PACKING: "OrderConfirmShipping",
   ORDER_SHIPPING: "OrderShipping",
   ORDER_DONE: "OrdeDone",
   ORDER_USER_CANCEL: "OrderUserCancel",
@@ -31,7 +31,7 @@ export const getUrlFromType = type => {
     case actionTypes.CHANGE_PASS:
       return `${HOST}change-pass`;
     case actionTypes.ORDER_CONFIRM:
-    case actionTypes.ORDER_CONFIRM_SHIPPING:
+    case actionTypes.ORDER_PACKING:
     case actionTypes.ORDER_SHIPPING:
     case actionTypes.ORDER_DONE:
     case actionTypes.ORDER_CANCEL:
@@ -49,7 +49,7 @@ export const getStatusFromType = type => {
   switch (type) {
     case actionTypes.ORDER_CONFIRM:
       return "-1";
-    case actionTypes.ORDER_CONFIRM_SHIPPING:
+    case actionTypes.ORDER_PACKING:
       return "-11";
     case actionTypes.ORDER_SHIPPING:
       return "0";
@@ -69,7 +69,7 @@ export const getTypeFromStatus = status => {
     case "-1":
       return actionTypes.ORDER_CONFIRM;
     case "-11":
-      return actionTypes.ORDER_CONFIRM_SHIPPING;
+      return actionTypes.ORDER_PACKING;
     case "0":
       return actionTypes.ORDER_SHIPPING;
     case "-12":

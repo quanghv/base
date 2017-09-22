@@ -25,11 +25,10 @@ export const responseNetworkError = type => ({
  * @param {*} type 
  */
 export const dispatchDataFromApiGet = (type, data, url) => dispatch => {
-  let tempUrl = url ? `${url}?` : getUrlFromType(type);
-  Object.keys(data).forEach(key => (tempUrl += `${key}=${data[key]}&`));
+  const tempUrl = url ? `${url}` : getUrlFromType(type);
   consoleLog(tempUrl, type);
   axios
-    .get(tempUrl)
+    .get(tempUrl, { params: data })
     .then(response => {
       consoleLog(response.data, type);
       if (type) dispatch(responseFromApi(response.data, type));
@@ -69,4 +68,20 @@ export const dispatchParams = (data, type) => dispatch => {
 export const postToServer = (actionUrl, data) => {
   consoleLog(data, actionUrl);
   return axios.post(actionUrl, data);
+};
+
+export const getFromServer = (actionUrl, data) => {
+  consoleLog(data, actionUrl);
+  let getParams; // = { pakage: "xyz.doctruyenonline" };
+  if (data) {
+    getParams = { ...getParams, ...data };
+  }
+  // console.log(getParams, "getParams");
+  return axios
+    .get(actionUrl, { params: getParams })
+    .then(response => response.data)
+    .catch(error => {
+      consoleLog(error);
+      return { networkError: true };
+    });
 };

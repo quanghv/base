@@ -22,6 +22,11 @@ import config from "../../config";
 
 const routesPub = [
   {
+    label: "Thêm đơn hàng",
+    icon: "magnifier-add",
+    screen: "OrderAdd"
+  },
+  {
     label: "Doanh thu",
     icon: "chart",
     screen: "Chart"

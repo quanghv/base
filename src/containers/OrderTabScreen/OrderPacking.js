@@ -2,7 +2,7 @@ import { connect } from "react-redux";
 import OrderScreen from "./index";
 import { dispatchDataFromApiGet, dispatchParams } from "../../actions";
 
-class OrderConfirmShipping extends OrderScreen {}
+class OrderPacking extends OrderScreen {}
 
 function mapStateToProps(state) {
   return {
@@ -14,4 +14,4 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   dispatchDataFromApiGet,
   dispatchParams
-})(OrderConfirmShipping);
+})(OrderPacking);
