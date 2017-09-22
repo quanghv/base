@@ -57,9 +57,9 @@ class OrderDetail extends AppComponent {
       this.state.startStatus !== this.state.endStatus
     ) {
       //badge
-      await this.props.dispatchDataFromApiGet(config.actionTypes.ORDER_BADGE, {
-        account_id: this.state.accountId
-      });
+      // await this.props.dispatchDataFromApiGet(config.actionTypes.ORDER_BADGE, {
+      //   account_id: this.state.accountId
+      // });
 
       //set reload on Tab Screen
       const reloadOnStatus = [

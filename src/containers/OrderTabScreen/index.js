@@ -277,6 +277,7 @@ export default class OrderScreen extends AppComponent {
 
   render() {
     const orderList = this.props.orderList;
+    console.log(orderList, "render");
     let view = this.handleRender(
       this.state.isLoading,
       orderList,
